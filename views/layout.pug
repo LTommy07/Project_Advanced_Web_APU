@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    header
+      nav
+        a(href='/') Home
+        |  | 
+        a(href='/login') Login
+        |  | 
+        a(href='/register') Register
+        |  | 
+        a(href='/dashboard') Dashboard
+        |  | 
+        a(href='/instructor/quizzes') My quizzes
+    block content

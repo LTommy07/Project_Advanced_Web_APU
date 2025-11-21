@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h2 Dashboard
+  p Welcome #{user.name}!
+  p Your role: #{user.role}
+
+  form(action="/logout" method="post")
+    button(type="submit") Logout

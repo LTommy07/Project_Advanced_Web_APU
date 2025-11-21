@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h2 Register
+
+  if error
+    p(style="color: red")= error
+
+  form(action="/register" method="post")
+    div
+      label(for="name") Name:
+      input#name(type="text" name="name" required value=name)
+    div
+      label(for="email") Email:
+      input#email(type="email" name="email" required value=email)
+    div
+      label(for="password") Password:
+      input#password(type="password" name="password" minlength="6" required)
+    div
+      label(for="role") Role:
+      select#role(name="role" required)
+        option(value="student" selected=role==='student') Student
+        option(value="instructor" selected=role==='instructor') Instructor
+    div
+      button(type="submit") Create account
