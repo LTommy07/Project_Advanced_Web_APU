@@ -1,6 +1,67 @@
 extends layout
 
 block content
-  h2 Welcom to the Quiz Platform
-  p this is the home page. Please login or register to continue.
+  // Hero Section
+  section.hero
+    .hero-content
+      h1.hero-title AWP Quiz Platform
+      p.hero-subtitle Créez, gérez et participez à des quiz interactifs en ligne
+      .hero-buttons
+        a.btn.btn-primary(href='/register') Commencer maintenant
+        a.btn.btn-secondary(href='/login') Se connecter
   
+  // Features Section
+  section.features
+    h2.section-title Fonctionnalités principales
+    .features-grid
+      .feature-card
+        .feature-icon 👨‍🏫
+        h3 Pour les Instructeurs
+        ul
+          li Créez des quiz personnalisés
+          li Gérez vos questions et réponses
+          li Suivez les performances des étudiants
+          li Publiez et planifiez vos quiz
+      
+      .feature-card
+        .feature-icon 🎓
+        h3 Pour les Étudiants
+        ul
+          li Accédez aux quiz disponibles
+          li Répondez en temps réel
+          li Recevez des résultats instantanés
+          li Consultez votre historique
+      
+      .feature-card
+        .feature-icon ⚡
+        h3 Interface Moderne
+        ul
+          li Design responsive et intuitif
+          li Expérience utilisateur optimisée
+          li Navigation fluide (SPA)
+          li Sécurité renforcée (JWT)
+  
+  // How it works Section
+  section.how-it-works
+    h2.section-title Comment ça marche ?
+    .steps
+      .step
+        .step-number 1
+        h3 Créez un compte
+        p Choisissez votre rôle : Instructeur ou Étudiant
+      
+      .step
+        .step-number 2
+        h3 Connectez-vous
+        p Accédez à votre tableau de bord personnalisé
+      
+      .step
+        .step-number 3
+        h3 Commencez !
+        p Créez des quiz ou participez aux évaluations
+  
+  // CTA Section
+  section.cta
+    h2 Prêt à commencer votre aventure ?
+    p Rejoignez notre plateforme de quiz en ligne dès maintenant
+    a.btn.btn-large(href='/register') Créer un compte gratuit
