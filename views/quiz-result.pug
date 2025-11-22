@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h2 Result for "#{quiz.title}"
+
+  p
+    | You answered 
+    strong #{correct} 
+    |  out of 
+    strong #{total}
+    |  questions correctly.
+
+  p
+    | Score: 
+    strong #{score}%
+
+  p
+    a(href="/student/quizzes") ← Back to quizzes list
+
+  hr
+
+  h3 Details
+
+  each d, index in details
+    div
+      h4 Question #{index + 1}
+      p= d.question_text
+      p
+        | Your answer: 
+        if d.isCorrect
+          strong(style="color: green") #{d.student_answer}
+        else
+          strong(style="color: red") #{d.student_answer}
+      p
+        | Correct answer: 
+        strong #{d.correct_option}
+      hr

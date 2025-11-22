@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h2= quiz.title
+
+  if quiz.description
+    p= quiz.description
+
+  if !questions || questions.length === 0
+    p This quiz has no questions yet.
+  else
+    form(action=`/student/quizzes/${quiz.id}/submit` method="post")
+      each q, index in questions
+        fieldset
+          legend Question #{index + 1}
+          p= q.question_text
+
+          div
+            label
+              input(type="radio" name=`q-${q.id}` value="A" required)
+              |  A. #{q.option_a}
+          div
+            label
+              input(type="radio" name=`q-${q.id}` value="B")
+              |  B. #{q.option_b}
+          div
+            label
+              input(type="radio" name=`q-${q.id}` value="C")
+              |  C. #{q.option_c}
+          div
+            label
+              input(type="radio" name=`q-${q.id}` value="D")
+              |  D. #{q.option_d}
+
+      button(type="submit") Submit my answers

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h2 My quizzes
+
+  p
+    | You are logged in as 
+    strong= user.name
+    |  (#{user.role})
+
+  p
+    a(href="/") ← Back to home
+    a(href="/instructor/quizzes/new" style="margin-left:20px") + Create New Quiz
+
+  if !quizzes || quizzes.length === 0
+    p You don't have any quizzes yet.
+  else
+    table
+      thead
+        tr
+          th Title
+          th Created at
+      tbody
+        each quiz in quizzes
+          tr
+            td= quiz.title
+            td= quiz.created_at
+            td 
+                a(href=`/instructor/quizzes/${quiz.id}/questions`) Manage Questions

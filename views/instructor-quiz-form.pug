@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h2 New quiz
+
+  if error
+    p(style="color:red")= error
+
+  form(action='/instructor/quizzes' method="post")
+    div
+      label(for="title") Title:
+      input#title(type="text" name="title" required value=quiz.title)
+    div
+      label(for="description") Description:
+      textarea#description(name="description")= quiz.description
+    div
+      button(type="submit") Create Quiz
+      |  
+      a(href="/instructor/quizzes") Cancel

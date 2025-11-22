@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h2 Available quizzes
+
+  p
+    | You are logged in as 
+    strong= user.name
+    |  (#{user.role})
+
+  if !quizzes || quizzes.length === 0
+    p No quiz available yet.
+  else
+    table
+      thead
+        tr
+          th Title
+          th Instructor
+          th Created at
+          th Actions
+      tbody
+        each quiz in quizzes
+          tr
+            td= quiz.title
+            td= quiz.instructor_name
+            td= quiz.created_at
+            td
+              a(href=`/student/quizzes/${quiz.id}/take`) Take this quiz
