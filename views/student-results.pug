@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .page
+    h1 My results
+
+    if attempts.length === 0
+      p You haven't taken any quiz yet.
+    else
+      table.results-table
+        thead
+          tr
+            th Quiz
+            th Score
+            th Date
+        tbody
+          each attempt in attempts
+            tr
+              td= attempt.quiz_title
+              td #{attempt.score} + '%'
+              td= attempt.created_at.toLocaleString ? attempt.created_at.toLocaleString() : attempt.created_at
+    a.button(href="/student/quizzes") Back to quizzes

@@ -123,18 +123,59 @@ router.post('/student/quizzes/:quizId/submit', requireAuth, function(req, res, n
         });
 
         const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+         // 🔹 NOUVEAU : on enregistre la tentative dans la table attempts
+        const insertSql = 'INSERT INTO attempts (user_id, quiz_id, score) VALUES (?, ?, ?)';
+        db.query(insertSql, [req.user.id, quizId, score], function(err3) {
+          if (err3) {
+            console.error(err3);
+            return next(err3);
+          }
 
-        res.render('quiz-result', {
-          user: req.user,
-          quiz: quiz,
-          total: total,
-          correct: correct,
-          score: score,
-          details: details
+          // Puis on affiche la page de résultat comme avant
+          res.render('quiz-result', {
+            user: req.user,
+            quiz: quiz,
+            total: total,
+            correct: correct,
+            score: score,
+            details: details
+          });
         });
       }
     );
   });
 });
+
+// Historique des résultats de l'étudiant
+router.get('/student/results', requireAuth, function(req, res, next) {
+  if (!req.user || req.user.role !== 'student') {
+    return res.status(403).send('Access denied. Students only.');
+  }
+
+  const sql = `
+    SELECT 
+      a.id,
+      a.score,
+      a.created_at,
+      q.title AS quiz_title
+    FROM attempts a
+    JOIN quizzes q ON a.quiz_id = q.id
+    WHERE a.user_id = ?
+    ORDER BY a.created_at DESC
+  `;
+
+  db.query(sql, [req.user.id], function(err, results) {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+
+    res.render('student-results', {
+      user: req.user,
+      attempts: results
+    });
+  });
+});
+
 
 module.exports = router;

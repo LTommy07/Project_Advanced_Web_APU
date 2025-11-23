@@ -232,6 +232,56 @@ router.post('/student/quizzes/:quizId/submit', requireAuth, function (req, res, 
   );
 });
 
+// Page résultats d'un quiz pour l'instructor
+router.get('/instructor/quizzes/:quizId/results', requireAuth, function(req, res, next) {
+  // Sécurité : seulement les instructors
+  if (!req.user || req.user.role !== 'instructor') {
+    return res.status(403).send('Access denied. Instructors only.');
+  }
+
+  const quizId = req.params.quizId;
+
+  // 1. Vérifier que le quiz appartient bien à cet instructor
+  db.query(
+    'SELECT * FROM quizzes WHERE id = ? AND instructor_id = ?',
+    [quizId, req.user.id],
+    function(err, quizRows) {
+      if (err) return next(err);
+
+      if (quizRows.length === 0) {
+        return res.status(404).send('Quiz not found or not yours.');
+      }
+
+      const quiz = quizRows[0];
+
+      // 2. Récupérer les tentatives des étudiants
+      const sql = `
+        SELECT a.id,
+               a.score,
+               a.taken_at,
+               u.name  AS student_name,
+               u.email AS student_email
+        FROM attempts a
+        JOIN users u ON a.user_id = u.id
+        WHERE a.quiz_id = ?
+        ORDER BY a.taken_at DESC
+      `;
+
+      db.query(sql, [quizId], function(err2, attempts) {
+        if (err2) return next(err2);
+
+        res.render('instructor-quiz-results', {
+          user: req.user,
+          quiz: quiz,
+          attempts: attempts
+        });
+      });
+    }
+  );
+});
+
+
+
 
 
 

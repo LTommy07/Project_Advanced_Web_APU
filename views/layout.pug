@@ -6,15 +6,29 @@ html
   body
     header
       nav
-        a(href='/') Home
-        |  | 
-        a(href='/login') Login
-        |  | 
-        a(href='/register') Register
-        |  | 
-        a(href='/dashboard') Dashboard
-        |  | 
-        a(href='/instructor/quizzes') My quizzes
-         |  | 
-        a(href='/student/quizzes') Available quizzes
+        // Si personne n'est connecté
+        if !user
+          a(href='/') Home
+          |  | 
+          a(href='/login') Login
+          |  | 
+          a(href='/register') Register
+       
+        else
+          a(href='/') Home
+          |  | 
+          a(href='/dashboard') Dashboard
+          |  | 
+
+          // Liens spécifiques selon le rôle
+          if user.role === 'instructor'
+            a(href='/instructor/quizzes') My quizzes
+          else if user.role === 'student'
+            a(href='/student/quizzes') Available quizzes
+            |  | 
+            a(href='/student/results') My results
+
+          |  | 
+          a(href='/logout') Logout
+
     block content

@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Results for #{quiz.title}
+
+  p You are logged in as #{user.name} (#{user.role})
+
+  if attempts.length === 0
+    p No student has taken this quiz yet.
+  else
+    table
+      thead
+        tr
+          th Student
+          th Email
+          th Score
+          th Taken at
+      tbody
+        each att in attempts
+          tr
+            td= att.student_name
+            td= att.student_email
+            td #{att.score}%
+            td= att.taken_at
