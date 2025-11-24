@@ -1,9 +1,118 @@
 extends layout
 
 block content
-  h2 Dashboard
-  p Welcome #{user.name}!
-  p Your role: #{user.role}
+  style.
+    .dashboard-container {
+      max-width: 900px;
+      margin: 3rem auto;
+    }
+    .welcome-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+      margin-bottom: 3rem;
+    }
+    .welcome-card h1 {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      color: white;
+    }
+    .welcome-card p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      margin: 0.5rem 0;
+    }
+    .role-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-top: 1rem;
+      backdrop-filter: blur(10px);
+    }
+    .action-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .action-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    .action-card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .action-card h3 {
+      color: #2d3748;
+      margin: 0 0 1rem 0;
+      font-size: 1.3rem;
+    }
+    .action-card p {
+      color: #718096;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .action-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      color: white;
+    }
 
-  form(action="/logout" method="post")
-    button(type="submit") Logout
+  .dashboard-container
+    .welcome-card
+      h1 👋 Welcome, #{user.name}!
+      p You are logged in as:
+      .role-badge= user.role === 'instructor' ? '👨‍🏫 Instructor' : '👨‍🎓 Student'
+
+    .action-cards
+      if user.role === 'instructor'
+        .action-card
+          .action-card-icon 📝
+          h3 My Quizzes
+          p Create, manage, and publish your quizzes
+          a.action-btn(href='/instructor/quizzes') Manage Quizzes
+        
+        .action-card
+          .action-card-icon 📈
+          h3 Analytics
+          p View student performance and results
+          a.action-btn(href='/instructor/quizzes') View Results
+      else
+        .action-card
+          .action-card-icon 📚
+          h3 Available Quizzes
+          p Take quizzes published by instructors
+          a.action-btn(href='/student/quizzes') Browse Quizzes
+        
+        .action-card
+          .action-card-icon 📄
+          h3 My Results
+          p View your quiz history and scores
+          a.action-btn(href='/student/results') View Results
