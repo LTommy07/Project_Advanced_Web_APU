@@ -29,6 +29,7 @@ router.get('/student/quizzes', requireAuth, function(req, res, next) {
            u.name AS instructor_name
     FROM quizzes q
     JOIN users u ON q.instructor_id = u.id
+    WHERE q.is_published = TRUE
     ORDER BY q.created_at DESC
   `;
 
@@ -54,10 +55,10 @@ router.get('/student/quizzes/:quizId/take', requireAuth, function(req, res, next
   const quizId = req.params.quizId;
 
   // 1. récupérer le quiz
-  db.query('SELECT * FROM quizzes WHERE id = ?', [quizId], function(err, quizResults) {
+  db.query('SELECT * FROM quizzes WHERE id = ? AND is_published = TRUE', [quizId], function(err, quizResults) {
     if (err) return next(err);
     if (quizResults.length === 0) {
-      return res.status(404).send('Quiz not found');
+      return res.status(404).send('Quiz not found or not published');
     }
 
     const quiz = quizResults[0];
