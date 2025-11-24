@@ -1,404 +1,111 @@
-forms.css/* ===== FORMS & AUTH PAGES STYLING ===== */
+/* ===== CONTRASTE & FORM CORRECTIONS (ajout ciblé sans casser la structure) ===== */
 
-/* Container for login/register pages */
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+/* Espace plus grand sous la navbar */
+body > *:not(header) {
+  margin-top: 2.5rem;
 }
 
-.auth-box {
-  background: white;
-  border-radius: 20px;
-  padding: 3rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 450px;
-  width: 100%;
-  animation: fadeInUp 0.6s ease;
+/* Liens en zone violette plus visibles */
+a,
+.dashboard-header a,
+.card a {
+  color: #2c5282;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.17);
 }
 
-.auth-box h2 {
-  color: #667eea;
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  font-weight: 700;
+/* Liens sur violet très foncé*/
+.dashboard-container a, .quiz-form-container a, .empty-state a {
+  color: #fafafa;
+  background: #667eea;
+  padding: .3em 1em;
+  border-radius: 7px;
+  margin: 0 5px;
 }
 
-.auth-box p {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
+.dashboard-container a:hover, .quiz-form-container a:hover, .empty-state a:hover {
+  background: #4536a7;
+  color: #ffd700;
 }
 
-/* Form styling */
+/* Crée plus d'espace autour du bouton Create Quiz */
+.quiz-form-container > a:first-child, .dashboard-header > a {
+  display: inline-block;
+  margin-bottom: 2rem!important;
+  margin-top: 0.7rem!important;
+  font-size: 1.04em;
+  letter-spacing: 0.3px;
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.14);
+}
+
+/* Register/Login Form plus clean */
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  max-width: 420px;
+  margin: 3rem auto 1.5rem auto;
+  background: #fff;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
 }
 
 form label {
-  color: #333;
   font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
+  color: #384477;
 }
 
 form input[type="text"],
 form input[type="email"],
-form input[type="password"],
-form input[type="number"],
-form select,
-form textarea {
-  width: 100%;
-  padding: 0.9rem 1.2rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
+form input[type="password"] {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 7px;
+  color: #2d3748;
 }
 
-form input:focus,
-form select:focus,
-form textarea:focus {
+form input:focus {
   outline: none;
   border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-form textarea {
-  min-height: 120px;
-  resize: vertical;
+form button[type="submit"] {
+  margin-top: 1rem;
+  font-size: 1.08em;
 }
 
-/* Button styling for forms */
-form button[type="submit"],
-.btn-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  margin-top: 0.5rem;
-}
-
-form button[type="submit"]:hover,
-.btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-form button[type="submit"]:active,
-.btn-submit:active {
-  transform: translateY(0);
-}
-
-/* Links in auth forms */
-.auth-link {
+form p, .auth-link, .register-hint {
+  margin-top: 1.2rem;
   text-align: center;
-  margin-top: 1.5rem;
-  color: #666;
+  color: #4a5568;
 }
 
-.auth-link a {
+form p a, .auth-link a, .register-hint a {
   color: #667eea;
   font-weight: 600;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  text-shadow: none;
+  background: transparent;
 }
 
-.auth-link a:hover {
+form p a:hover, .auth-link a:hover, .register-hint a:hover {
   color: #764ba2;
   text-decoration: underline;
 }
 
-/* Dashboard styling */
-.dashboard-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+/* Pour rendre des titres toujours visibles, si nécessaires */
+h1, h2 {
+  color: #333!important;
+}
+/* Résultats étudiant: grid header sur fond foncé, police blanche! */
+table thead th {
+  background: #667eea!important;
+  color: #fff!important;
+  letter-spacing: .3px;
 }
 
-.dashboard-content {
-  max-width: 1200px;
-  margin: 0 auto;
+.empty-state p, .empty-state {
+  color: #3b4365;
+  font-size: 1.12em;
 }
 
-.dashboard-header {
-  background: white;
-  border-radius: 15px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-header h1 {
-  color: #667eea;
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.dashboard-header p {
-  color: #666;
-  font-size: 1.1rem;
-}
-
-/* Cards for dashboard sections */
-.card {
-  background: white;
-  border-radius: 15px;
-  padding: 2rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.card h2 {
-  color: #667eea;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #f0f0f0;
-}
-
-/* Table styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-}
-
-thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-thead th {
-  padding: 1.2rem;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-tbody tr {
-  border-bottom: 1px solid #f0f0f0;
-  transition: background 0.2s ease;
-}
-
-tbody tr:hover {
-  background: #f8f9fa;
-}
-
-tbody td {
-  padding: 1.2rem;
-  color: #333;
-}
-
-/* Action buttons in tables */
-.btn-action {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  margin-right: 0.5rem;
-}
-
-.btn-edit {
-  background: #4CAF50;
-  color: white;
-}
-
-.btn-edit:hover {
-  background: #45a049;
-  transform: translateY(-2px);
-}
-
-.btn-delete {
-  background: #f44336;
-  color: white;
-}
-
-.btn-delete:hover {
-  background: #da190b;
-  transform: translateY(-2px);
-}
-
-.btn-view {
-  background: #2196F3;
-  color: white;
-}
-
-.btn-view:hover {
-  background: #0b7dda;
-  transform: translateY(-2px);
-}
-
-.btn-add {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
-  font-weight: 600;
-  display: inline-block;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.btn-add:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-/* Alert messages */
-.alert {
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-}
-
-.alert-error {
-  background: #fee;
-  color: #c33;
-  border-left: 4px solid #f44336;
-}
-
-.alert-success {
-  background: #efe;
-  color: #3c3;
-  border-left: 4px solid #4CAF50;
-}
-
-.alert-info {
-  background: #e3f2fd;
-  color: #1976d2;
-  border-left: 4px solid #2196F3;
-}
-
-/* Quiz form specific styling */
-.quiz-form-container {
-  background: white;
-  border-radius: 15px;
-  padding: 2.5rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 2rem auto;
-}
-
-.quiz-form-container h2 {
-  color: #667eea;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-/* Question list styling */
-.question-item {
-  background: #f8f9fa;
-  border-left: 4px solid #667eea;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.question-item:hover {
-  background: #e9ecef;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Empty state */
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: #999;
-}
-
-.empty-state p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .auth-box {
-    padding: 2rem 1.5rem;
-  }
-  
-  .dashboard-container {
-    padding: 1rem;
-  }
-  
-  .card {
-    padding: 1.5rem;
-  }
-  
-  table {
-    font-size: 0.9rem;
-  }
-  
-  thead th,
-  tbody td {
-    padding: 0.8rem 0.5rem;
-  }
-  
-  .btn-action {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-box h2 {
-    font-size: 1.5rem;
-  }
-  
-  form input,
-  form select,
-  form textarea {
-    padding: 0.8rem 1rem;
-    font-size: 0.95rem;
-  }
-  
-  .dashboard-header h1 {
-    font-size: 2rem;
-  }
-  
-  .card h2 {
-    font-size: 1.5rem;
-  }
+@media (max-width: 550px) {
+  form { padding: 1.1rem 0.5rem; border-radius: 7px; }
 }
