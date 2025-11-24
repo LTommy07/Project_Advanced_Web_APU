@@ -30,6 +30,8 @@ html
             a(href='/student/results') My results
 
           |  | 
-          a(href='/logout') Logout
+          form(method='POST', action='/logout', style='display:inline')
+            button(type='submit') Logout
+
 
     block content
