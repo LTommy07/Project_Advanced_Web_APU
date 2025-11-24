@@ -1,0 +1,77 @@
+/* Correction visibilité: My Quizzes table */
+
+/* Table header (thead) bien blanc pour contraste sur fond violet */
+thead th {
+  color: #222 !important;
+  background: #fff !important;
+  font-size: 1.05em;
+  letter-spacing: 0.01em;
+  text-shadow: none !important;
+}
+
+/* Lignes du body, texte foncé */
+tbody td {
+  color: #2d265e !important;
+  font-size: 1.12em;
+}
+
+/* Badges status */
+.badge.published {
+  background: #b0f2b4;
+  color: #106227;
+  font-size: 1em;
+}
+.badge.draft {
+  background: #ffdddd;
+  color: #a02222;
+}
+
+/* Actions (liens) visibles, bleu sur fond clair */
+td a, td form button, td form .btn-publish, td form .btn-unpublish, td form .btn-delete {
+  color: #344fff !important;
+  font-weight: 600;
+  font-size: 1.06em;
+  background: transparent !important;
+  text-shadow: none !important;
+  border: none;
+  box-shadow: none;
+}
+td a:hover, td form button:hover {
+  color: #764ba2 !important;
+  text-decoration: underline;
+}
+
+/* Boutons Publish/Unpublish/Delete: plus de padding-ombre */
+td form button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #fff !important;
+  border-radius: 10px;
+  padding: 0.7em 1.9em;
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+  font-size: 1em;
+  font-weight: bold;
+  box-shadow: 0 2px 16px rgba(76, 58, 130, 0.12);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+td form button:hover {
+  background: #5140a5 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.22);
+}
+
+/* "Create New Quiz" renforcé */
+.block-content > a, .block-content a[href*="/quizzes/new"], a[href*="/quizzes/new"] {
+  color: #fff !important;
+  background: linear-gradient(135deg,#667eea 40%,#764ba2 100%);
+  padding: .6rem 1.6rem;
+  border-radius: 12px;
+  font-weight: bold;
+  margin: 0.5rem 0 1.5rem 0;
+  font-size: 1.12em;
+  box-shadow: 0 2px 12px rgba(102,126,234,.11);
+}
+.block-content > a:hover, .block-content a[href*="/quizzes/new"]:hover {
+  background: #5140a5;
+  color: #ffd700 !important;
+}
