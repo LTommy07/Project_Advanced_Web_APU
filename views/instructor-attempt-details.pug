@@ -1,0 +1,80 @@
+extends layout
+
+block content
+  h1 Attempt Details
+  
+  .attempt-info
+    h2 Student: #{attempt.student_name} (#{attempt.student_email})
+    p Quiz: #{attempt.quiz_title}
+    p Score: #{attempt.score}% (#{attempt.total_points}/#{attempt.max_points} points)
+    if attempt.time_taken
+      p Time Taken: #{Math.floor(attempt.time_taken / 60)} min #{attempt.time_taken % 60} sec
+    p Date: #{new Date(attempt.created_at).toLocaleString()}
+
+  h2 Responses
+  
+  if details && details.length > 0
+    each detail, index in details
+      .question-detail(class=detail.is_correct ? 'correct' : 'incorrect')
+        h3 Question #{index + 1} (#{detail.points} pts)
+        p.question-text= detail.question_text
+        
+        .options
+          p(class=detail.correct_option === 'A' ? 'correct-answer' : '') A: #{detail.option_a}
+          p(class=detail.correct_option === 'B' ? 'correct-answer' : '') B: #{detail.option_b}
+          p(class=detail.correct_option === 'C' ? 'correct-answer' : '') C: #{detail.option_c}
+          p(class=detail.correct_option === 'D' ? 'correct-answer' : '') D: #{detail.option_d}
+        
+        .student-response
+          p Student answered: 
+            strong(class=detail.is_correct ? 'text-success' : 'text-danger')= detail.student_answer || 'No answer'
+          p Points earned: #{detail.points_earned}/#{detail.points}
+          if detail.is_correct
+            p.badge.success ✓ Correct
+          else
+            p.badge.error ✗ Incorrect
+  else
+    p No details available
+
+  a(href=`/instructor/quizzes/${attempt.quiz_id}/results`) Back to Results
+
+  style.
+    .question-detail {
+      border: 2px solid #ddd;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+    .question-detail.correct {
+      border-color: #28a745;
+      background-color: #f0fff4;
+    }
+    .question-detail.incorrect {
+      border-color: #dc3545;
+      background-color: #fff5f5;
+    }
+    .correct-answer {
+      background-color: #d4edda;
+      padding: 5px;
+      border-radius: 4px;
+    }
+    .text-success {
+      color: #28a745;
+    }
+    .text-danger {
+      color: #dc3545;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .badge.success {
+      background-color: #28a745;
+      color: white;
+    }
+    .badge.error {
+      background-color: #dc3545;
+      color: white;
+    }
