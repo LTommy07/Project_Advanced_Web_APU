@@ -1,10 +1,10 @@
 extends layout
 
 block content
-  h1 My Quizzes
-  
-  a(href='/instructor/quizzes/new') + Create New Quiz
-  
+  .top-bar(style="display: flex; align-items:center; justify-content:space-between; margin-bottom: 1.8rem;")
+    h1(style="margin:0; font-size:2.4rem; font-weight:700; letter-spacing:-2px; color:#222;") My Quizzes
+    a(href='/instructor/quizzes/new' style='font-size:1.15em;padding:0.7em 2em;background:linear-gradient(90deg,#667eea 60%,#764ba2);color:#fff;border-radius:12px;font-weight:bold;box-shadow:0 2px 8px rgba(102,126,234,0.14);margin-left:2em;text-decoration:none;') + Create New Quiz
+
   if quizzes && quizzes.length > 0
     table
       thead
@@ -38,6 +38,14 @@ block content
     p No quizzes yet. Create your first quiz!
 
   style.
+    .top-bar {
+      margin-top: 18px !important;
+    }
+    h1 {
+      color: #23223f;
+      margin-bottom: 1.2rem;
+      text-shadow: none;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -48,55 +56,72 @@ block content
       text-align: left;
       border-bottom: 1px solid #ddd;
     }
-    th {
-      background-color: #f8f9fa;
+    th{
+      background: #f7f7fc;
+      color: #23223f;
       font-weight: bold;
+      letter-spacing: 0.002em;
     }
     .badge {
       padding: 4px 8px;
       border-radius: 4px;
-      font-size: 0.85em;
+      font-size: 0.90em;
       font-weight: bold;
+      letter-spacing: 0.02em;
     }
     .badge.published {
-      background-color: #28a745;
-      color: white;
+      background-color: #34c759;
+      color: #fff;
     }
     .badge.draft {
-      background-color: #6c757d;
-      color: white;
+      background-color: #adb5bd;
+      color: #fff;
     }
     .btn-publish {
-      background-color: #28a745;
+      background: linear-gradient(90deg, #21c8fd 30%, #5146e1 100%);
       color: white;
-      padding: 5px 10px;
+      min-width: 90px;
+      padding: 0.6em 1.2em;
       border: none;
-      border-radius: 4px;
+      border-radius: 7px;
       cursor: pointer;
+      font-weight: bold;
+      font-size: 1em;
+      box-shadow: 0 2px 8px rgba(52,90,234,0.11);
     }
     .btn-unpublish {
-      background-color: #dc3545;
-      color: white;
-      padding: 5px 10px;
+      background: linear-gradient(90deg, #f857a6 10%, #ff5858 100%);
+      color: #fff;
+      min-width: 90px;
+      padding: 0.6em 1.2em;
       border: none;
-      border-radius: 4px;
+      border-radius: 7px;
       cursor: pointer;
+      font-weight: bold;
+      font-size: 1em;
+      box-shadow:0 2px 8px rgba(210,55,95,0.08);
     }
     .btn-delete {
-      background-color: #dc3545;
+      background: linear-gradient(90deg,#f857a6,#ff5858 85%);
       color: white;
-      padding: 5px 10px;
+      margin-left:10px;
+      padding: 0.6em 1.2em;
       border: none;
-      border-radius: 4px;
+      border-radius: 7px;
       cursor: pointer;
+      font-weight: bold;
+      font-size: 1em;
+      box-shadow:0 2px 6px rgba(196,54,77,0.09);
     }
     .btn-delete:hover {
-      background-color: #c82333;
+      background: #e03259;
     }
     a {
-      color: #007bff;
+      color: #344fff;
       text-decoration: none;
+      font-weight: 600;
     }
     a:hover {
       text-decoration: underline;
+      color: #5146e1;
     }
