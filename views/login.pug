@@ -1,13 +1,18 @@
 extends layout
 
 block content
-  h2 Login
-  form(action="/login" method="post")
-    div
-      label(for="email") Email:
-      input#email(type="email" name="email" required)
-    div
-      label(for="password") Password:
-      input#password(type="password" name="password" minlength="6" required)
-    div
-      button(type="submit") Sign in
+  .auth-container
+    .auth-box
+      h2 Login
+      p Welcome back! Please login to your account.
+      form(action="/login" method="post")
+        .form-group
+          label(for="email") Email:
+          input#email(type="email" name="email" required)
+        .form-group
+          label(for="password") Password:
+          input#password(type="password" name="password" minlength="6" required)
+        button(type="submit") Sign In
+      .auth-link
+        p Don't have an account? 
+          a(href="/register") Register here
