@@ -1,24 +1,65 @@
 extends layout
 
 block content
-  h1 Results for #{quiz.title}
-
-  p You are logged in as #{user.name} (#{user.role})
-
-  if attempts.length === 0
-    p No student has taken this quiz yet.
-  else
+  h1 Results for "#{quiz.title}"
+  
+  p Total Attempts: #{attempts.length}
+  
+  if attempts && attempts.length > 0
     table
       thead
         tr
           th Student
           th Email
           th Score
-          th Taken at
+          th Points
+          th Time Taken
+          th Date
+          th Actions
       tbody
-        each att in attempts
+        each attempt in attempts
           tr
-            td= att.student_name
-            td= att.student_email
-            td #{att.score}%
-            td= att.taken_at
+            td= attempt.student_name
+            td= attempt.student_email
+            td 
+              span(class=attempt.score >= 70 ? 'score-good' : 'score-low')= attempt.score + '%'
+            td= attempt.total_points + '/' + attempt.max_points
+            td= attempt.time_taken ? Math.floor(attempt.time_taken / 60) + ' min ' + (attempt.time_taken % 60) + ' sec' : 'N/A'
+            td= new Date(attempt.created_at).toLocaleString()
+            td
+              a(href=`/instructor/attempts/${attempt.id}/details`) View Details
+  else
+    p No attempts yet.
+  
+  a(href='/instructor/quizzes') Back to My Quizzes
+
+  style.
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+    }
+    .score-good {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .score-low {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
