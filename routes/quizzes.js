@@ -49,8 +49,29 @@ router.post('/instructor/quizzes', requireAuth, ensureInstructor, function (req,
       quiz: { title, description, time_limit }
     });
   }
+  // 🐛 DEBUG
+  console.log('=== CRÉATION QUIZ ===');
+  console.log('title:', title);
+  console.log('description:', description);
+  console.log('time_limit (brut):', time_limit);
+  console.log('type de time_limit:', typeof time_limit);
+  
+  // Validation
+  if (!title || title.trim() === '') {
+    return res.render('instructor-quiz-form', {
+      user: req.user,
+      error: 'Title is required.',
+      quiz: { title, description, time_limit }
+    });
+  }
 
-  const timeLimitValue = time_limit && !isNaN(time_limit) ? parseInt(time_limit) : null;
+  let timeLimitValue = null;
+  if (time_limit && time_limit.toString().trim() !== '') {
+    timeLimitValue = parseInt(time_limit, 10);
+  }
+  
+  console.log('timeLimitValue (final):', timeLimitValue);
+
 
   db.query(
     'INSERT INTO quizzes (instructor_id, title, description, time_limit, is_published) VALUES (?, ?, ?, ?, ?)',
