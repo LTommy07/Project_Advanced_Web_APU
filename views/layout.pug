@@ -1,37 +1,39 @@
 doctype html
 html
   head
-    title= title
+    title= title || 'AWP Quiz Platform'
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/forms.css')
+    link(rel='stylesheet', href='/stylesheets/responsive.css')
+  
   body
     header
-      nav
-        // Si personne n'est connecté
-        if !user
-          a(href='/') Home
-          |  | 
-          a(href='/login') Login
-          |  | 
-          a(href='/register') Register
-       
-        else
-          a(href='/') Home
-          |  | 
-          a(href='/dashboard') Dashboard
-          |  | 
+      nav.navbar
+        a.nav-brand(href='/') 🎓 Quiz Platform
+        
+        input#nav-toggle.nav-toggle(type='checkbox')
+        label.nav-toggle-label(for='nav-toggle')
+          span
+        
+        .nav-links
+          if user
+            a(href='/dashboard') Dashboard
+            
+            if user.role === 'instructor'
+              a(href='/instructor/quizzes') My Quizzes
+            else
+              a(href='/student/quizzes') Available Quizzes
+              a(href='/student/results') My Results
+            
+            span.user-info 👤 #{user.name}
+            form.logout-form(method='POST', action='/logout')
+              button.btn-logout(type='submit') Logout
+          else
+            a(href='/') Home
+            a(href='/login') Login
+            a(href='/register') Register
 
-          // Liens spécifiques selon le rôle
-          if user.role === 'instructor'
-            a(href='/instructor/quizzes') My quizzes
-          else if user.role === 'student'
-            a(href='/student/quizzes') Available quizzes
-            |  | 
-            a(href='/student/results') My results
-
-          |  | 
-          form(method='POST', action='/logout', style='display:inline')
-            button(type='submit') Logout
-
-
-    block content
+    main.container
+      block content

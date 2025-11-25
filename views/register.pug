@@ -1,25 +1,146 @@
 extends layout
 
 block content
-  h2 Register
+  style.
+    .form-container {
+      max-width: 450px;
+      margin: 3rem auto;
+      padding: 2.5rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h1 {
+      text-align: center;
+      color: #2d3748;
+      margin-bottom: 2rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 600;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .form-group input:invalid:not(:placeholder-shown) {
+      border-color: #e53e3e;
+    }
+    .form-group input:valid:not(:placeholder-shown) {
+      border-color: #48bb78;
+    }
+    .form-group small {
+      display: block;
+      margin-top: 0.5rem;
+      color: #718096;
+      font-size: 0.85rem;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    .form-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #718096;
+    }
+    .form-footer a {
+      color: #667eea;
+      font-weight: 600;
+    }
+    .error-message {
+      background: #fed7d7;
+      color: #c53030;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
 
-  if error
-    p(style="color: red")= error
+  .form-container
+    h1 📝 Create Account
 
-  form(action="/register" method="post")
-    div
-      label(for="name") Name:
-      input#name(type="text" name="name" required value=name)
-    div
-      label(for="email") Email:
-      input#email(type="email" name="email" required value=email)
-    div
-      label(for="password") Password:
-      input#password(type="password" name="password" minlength="6" required)
-    div
-      label(for="role") Role:
-      select#role(name="role" required)
-        option(value="student" selected=role==='student') Student
-        option(value="instructor" selected=role==='instructor') Instructor
-    div
-      button(type="submit") Create account
+    if error
+      .error-message= error
+
+    form(method='POST', action='/register', novalidate)
+      .form-group
+        label(for='name') Full Name
+        input#name(
+          type='text',
+          name='name',
+          placeholder='Enter your full name',
+          required,
+          minlength='2',
+          maxlength='100',
+          pattern='[A-Za-zÀ-ÿ\\s]{2,100}',
+          title='Name must be 2-100 characters, letters only'
+        )
+        small Letters only, 2-100 characters
+
+      .form-group
+        label(for='email') Email Address
+        input#email(
+          type='email',
+          name='email',
+          placeholder='your.email@example.com',
+          required,
+          pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$',
+          title='Please enter a valid email address'
+        )
+        small We'll never share your email
+
+      .form-group
+        label(for='password') Password
+        input#password(
+          type='password',
+          name='password',
+          placeholder='Create a strong password',
+          required,
+          minlength='6',
+          maxlength='50',
+          title='Password must be at least 6 characters'
+        )
+        small Minimum 6 characters
+
+      .form-group
+        label(for='role') I am a...
+        select#role(name='role', required)
+          option(value='') -- Select your role --
+          option(value='student') 👨‍🎓 Student
+          option(value='instructor') 👨‍🏫 Instructor
+
+      button.btn-submit(type='submit') Create Account
+
+    .form-footer
+      p Already have an account? 
+        a(href='/login') Login here

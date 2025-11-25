@@ -1,64 +1,132 @@
 extends layout
 
 block content
-  h1 Create New Quiz
-  
-  if error
-    p.error= error
-
-  form(method='POST', action='/instructor/quizzes')
-    div
-      label(for='title') Title:
-      input(type='text', name='title', id='title', value=quiz.title, required)
-    
-    div
-      label(for='description') Description:
-      textarea(name='description', id='description', rows='4')= quiz.description
-    
-    div
-      label(for='time_limit') Time Limit (minutes, optional):
-      input(type='number', name='time_limit', id='time_limit', min='1', value=quiz.time_limit, placeholder='No limit')
-      small Leave empty for no time limit
-    
-    button(type='submit') Create Quiz
-    a(href='/instructor/quizzes') Cancel
-
   style.
-    form div {
-      margin-bottom: 15px;
+    .form-container {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 2.5rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
-    label {
+    .form-container h1 {
+      text-align: center;
+      color: #2d3748;
+      margin-bottom: 2rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
       display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 600;
     }
-    input[type='text'], input[type='number'], textarea {
+    .form-group input,
+    .form-group textarea {
       width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      padding: 0.85rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
     }
-    small {
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .form-group input:invalid:not(:placeholder-shown) {
+      border-color: #e53e3e;
+    }
+    .form-group input:valid:not(:placeholder-shown) {
+      border-color: #48bb78;
+    }
+    .form-group small {
       display: block;
-      color: #666;
-      margin-top: 5px;
+      margin-top: 0.5rem;
+      color: #718096;
+      font-size: 0.85rem;
     }
-    button {
-      padding: 10px 20px;
-      background-color: #007bff;
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
-      margin-right: 10px;
+      transition: all 0.3s ease;
     }
-    button:hover {
-      background-color: #0056b3;
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
-    .error {
-      color: red;
-      padding: 10px;
-      background-color: #ffebee;
-      border-radius: 4px;
-      margin-bottom: 15px;
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #667eea;
     }
+    .error-message {
+      background: #fed7d7;
+      color: #c53030;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+  .form-container
+    h1 📝 Create New Quiz
+
+    if error
+      .error-message= error
+
+    form(method='POST', action='/instructor/quizzes')
+      .form-group
+        label(for='title') Quiz Title *
+        input#title(
+          type='text',
+          name='title',
+          placeholder='Enter quiz title',
+          required,
+          minlength='3',
+          maxlength='255',
+          value=quiz.title || '',
+          title='Title must be 3-255 characters'
+        )
+
+      .form-group
+        label(for='description') Description
+        textarea#description(
+          name='description',
+          placeholder='Describe what this quiz is about...',
+          maxlength='1000'
+        )= quiz.description || ''
+
+      .form-group
+        label(for='time_limit') Time Limit (minutes)
+        input#time_limit(
+          type='number',
+          name='time_limit',
+          placeholder='Leave empty for no limit',
+          min='1',
+          max='180',
+          value=quiz.time_limit || ''
+        )
+        small Optional: 1-180 minutes
+
+      button.btn-submit(type='submit') Create Quiz
+
+    a.back-link(href='/instructor/quizzes') ← Back to My Quizzes

@@ -1,0 +1,198 @@
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* === NAVBAR MOBILE (Hamburger Menu) === */
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  display: block;
+  background: #667eea;
+  height: 3px;
+  width: 25px;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  content: '';
+  position: absolute;
+}
+
+.nav-toggle-label span::before {
+  top: -8px;
+}
+
+.nav-toggle-label span::after {
+  top: 8px;
+}
+
+/* Tablettes et mobiles (max 768px) */
+@media (max-width: 768px) {
+  /* Navbar hamburger */
+  .nav-toggle-label {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+  }
+  
+  .navbar {
+    position: relative;
+    padding: 1rem;
+  }
+  
+  .nav-brand {
+    display: block;
+  }
+  
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: white;
+    padding: 1rem;
+    gap: 0.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .nav-links a,
+  .nav-links span,
+  .nav-links button {
+    display: block;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-radius: 6px;
+  }
+  
+  .nav-links a:hover {
+    background: #f7fafc;
+  }
+  
+  /* Afficher le menu quand checkbox cochée */
+  .nav-toggle:checked ~ .nav-links {
+    display: flex;
+  }
+  
+  /* Animation hamburger -> X */
+  .nav-toggle:checked ~ .nav-toggle-label span {
+    background: transparent;
+  }
+  
+  .nav-toggle:checked ~ .nav-toggle-label span::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  
+  .nav-toggle:checked ~ .nav-toggle-label span::after {
+    transform: rotate(-45deg);
+    top: 0;
+  }
+  
+  /* Grilles */
+  .quiz-grid,
+  .action-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Tableaux */
+  table {
+    font-size: 0.85rem;
+  }
+  
+  th, td {
+    padding: 0.5rem;
+  }
+  
+  /* Formulaires */
+  .form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  /* Top bar */
+  .top-bar {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  /* Dashboard */
+  .dashboard-container {
+    margin: 1rem;
+  }
+  
+  .welcome-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .welcome-card h1 {
+    font-size: 1.5rem;
+  }
+  
+  /* User info */
+  .user-info {
+    font-size: 0.85rem;
+  }
+  
+  /* Logout button */
+  .btn-logout {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Mobiles (max 480px) */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.3rem;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+  }
+  
+  .btn-submit,
+  .action-btn,
+  .btn-take-quiz {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .quiz-card,
+  .action-card {
+    padding: 1.2rem;
+  }
+  
+  .page-header {
+    padding: 1.5rem 1rem;
+    margin: -1rem -1rem 2rem -1rem;
+  }
+  
+  .page-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .quiz-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  /* Container */
+  .container {
+    padding: 0.5rem;
+  }
+}
