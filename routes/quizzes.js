@@ -216,38 +216,29 @@ router.get('/student/quizzes', requireAuth, function (req, res, next) {
 });
 
 // Page pour faire un quiz (côté étudiant)
+// Page pour faire un quiz (côté étudiant) - Vue.js version
 router.get('/student/quizzes/:quizId/take', requireAuth, function (req, res, next) {
   const quizId = req.params.quizId;
 
-  // On récupère d'abord le quiz
+  // Vérifier que le quiz existe et est publié
   db.query(
-    'SELECT * FROM quizzes WHERE id = ? AND is_published = TRUE',
+    'SELECT id FROM quizzes WHERE id = ? AND is_published = TRUE',
     [quizId],
-    function (err, quizResults) {
+    function (err, results) {
       if (err) return next(err);
-      if (quizResults.length === 0) {
+      if (results.length === 0) {
         return res.status(404).send('Quiz not found or not published');
       }
 
-      const quiz = quizResults[0];
-
-      // Puis on récupère ses questions
-      db.query(
-        'SELECT * FROM questions WHERE quiz_id = ? ORDER BY id ASC',
-        [quizId],
-        function (err2, questionResults) {
-          if (err2) return next(err2);
-
-          res.render('take-quiz', {
-            user: req.user,
-            quiz,
-            questions: questionResults
-          });
-        }
-      );
+      // Rendre la vue Vue.js avec juste l'ID du quiz
+      res.render('take-quiz-vue', {
+        user: req.user,
+        quizId: quizId
+      });
     }
   );
 });
+
 
 // Soumission des réponses d'un quiz avec enregistrement détaillé
 router.post('/student/quizzes/:quizId/submit', requireAuth, function (req, res, next) {

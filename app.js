@@ -13,7 +13,7 @@ var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var quizRouter = require('./routes/quiz');
 var quizzesRouter = require('./routes/quizzes');
-
+var apiRouter = require('./routes/api'); 
 var app = express();
 
 // view engine setup
@@ -31,6 +31,7 @@ app.use('/users', usersRouter);
 app.use('/', authRouter);
 app.use('/',quizzesRouter);
 app.use('/',quizRouter);
+app.use('/api', apiRouter);
 
 
 // catch 404 and forward to error handler
