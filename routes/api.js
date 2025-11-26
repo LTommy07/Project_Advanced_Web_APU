@@ -5,8 +5,7 @@ var db = require('../config/db');
 var requireAuth = require('../middleware/auth');
 
 // ===== API pour récupérer un quiz avec ses questions =====
-router.get('/api/quizzes/:quizId', requireAuth, function(req, res, next) {
-  const quizId = req.params.quizId;
+router.get('/quizzes/:quizId', requireAuth, function(req, res, next) {  const quizId = req.params.quizId;
 
   // Vérifier que le quiz est publié
   db.query(
@@ -44,7 +43,7 @@ router.get('/api/quizzes/:quizId', requireAuth, function(req, res, next) {
 });
 
 // ===== API pour soumettre les réponses =====
-router.post('/api/quizzes/:quizId/submit', requireAuth, function(req, res, next) {
+router.post('/quizzes/:quizId/submit', requireAuth, function(req, res, next) {
   const quizId = req.params.quizId;
   const answers = req.body.answers; // { question_id: 'A', ... }
   const timeTaken = req.body.time_taken || null;
