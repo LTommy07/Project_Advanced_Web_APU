@@ -1,5 +1,27 @@
 forms.css/* ===== FORMS & AUTH PAGES STYLING ===== */
 
+
+/* ===== FORMS & AUTH PAGES STYLING ===== */
+
+/* Fix: Enlève le padding du container parent pour auth pages */
+.container {
+  padding: 0 !important;
+}
+
+.container .auth-container {
+  margin: 0 !important;
+}
+
+/* Container for login/register pages */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
 /* Container for login/register pages */
 .auth-container {
   min-height: 100vh;
