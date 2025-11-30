@@ -8,10 +8,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
-var quizRouter = require('./routes/quiz');
 var quizzesRouter = require('./routes/quizzes');
 var apiRouter = require('./routes/api'); 
 var app = express();
@@ -26,12 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/', authRouter);
-app.use('/',quizzesRouter);
-app.use('/',quizRouter);
-app.use('/api', apiRouter);
+app.use('/', authRouter);          // Login, register, logout
+app.use('/', quizzesRouter);       // Toutes les routes quiz (instructor + student)
+app.use('/api', apiRouter);        // API JSON pour Vue.js
 
 
 // catch 404 and forward to error handler
