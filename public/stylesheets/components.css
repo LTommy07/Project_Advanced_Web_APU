@@ -136,6 +136,31 @@
   transform: translateY(-2px);
 }
 
+/* Publish/Unpublish specific buttons */
+.btn-publish {
+  background: linear-gradient(90deg, #21c8fd 30%, #5146e1 100%);
+  color: white;
+  min-width: 90px;
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(52, 90, 234, 0.11);
+}
+
+.btn-unpublish {
+  background: linear-gradient(90deg, #f857a6 10%, #ff5858 100%);
+  color: #fff;
+  min-width: 90px;
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(210, 55, 95, 0.08);
+}
+
 /* ===== TABLES ===== */
 .table-modern {
   width: 100%;
@@ -166,22 +191,28 @@
 }
 
 /* ===== BADGES ===== */
+/* Modifier les badges existants (ligne ~180) */
 .badge {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.85rem;
+  padding: 0.4rem 0.8rem;  /* ← Changer de 0.5rem 1rem à 0.4rem 0.8rem */
+  border-radius: 4px;       /* ← Changer de 20px à 4px */
+  font-weight: 600;         /* ← OK déjà là */
+  font-size: 0.90em;        /* ← Changer de 0.85rem à 0.90em */
+  letter-spacing: 0.02em;   /* ← AJOUTER */
+  display: inline-block;
 }
 
+.badge.published,
 .badge-published {
-  background: #c6f6d5;
-  color: #22543d;
+  background: #34c759;      /* ← Changer couleur */
+  color: #fff;
 }
 
+.badge.draft,
 .badge-draft {
-  background: #fed7d7;
-  color: #742a2a;
+  background: #adb5bd;      /* ← Changer couleur */
+  color: #fff;
 }
+
 
 .role-badge {
   display: inline-block;
