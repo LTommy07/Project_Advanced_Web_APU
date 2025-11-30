@@ -50,6 +50,15 @@ forms.css/* ===== FORMS & AUTH PAGES STYLING ===== */
   font-weight: 700;
 }
 
+/* Form hints */
+.form-group small {
+  display: block;
+  color: #718096;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+
 .auth-box p {
   text-align: center;
   color: #666;
