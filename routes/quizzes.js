@@ -12,6 +12,14 @@ function ensureInstructor(req, res, next) {
   next();
 }
 
+
+// ==================== PAGE D'ACCUEIL ====================
+
+// Route pour la page d'accueil (home)
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'AWP Quiz Platform' });
+});
+
 // Liste des quizzes de l'instructor connecté
 router.get('/instructor/quizzes', requireAuth, ensureInstructor, function (req, res, next) {
   db.query(
