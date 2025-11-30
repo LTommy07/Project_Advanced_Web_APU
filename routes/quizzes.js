@@ -20,6 +20,150 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'AWP Quiz Platform' });
 });
 
+// ==================== DASHBOARD ====================
+
+// Dashboard (protégé)
+router.get('/dashboard', requireAuth, function(req, res, next) {
+  res.render('dashboard', { user: req.user });
+});
+
+// ==================== STUDENT ROUTES ====================
+
+// Liste des quizzes pour les étudiants
+router.get('/student/quizzes', requireAuth, function(req, res, next) {
+  // sécurité : on vérifie que c'est bien un student
+  if (!req.user || req.user.role !== 'student') {
+    return res.status(403).send('Access denied. Students only.');
+  }
+  const sql = `
+    SELECT q.id,
+           q.title,
+           q.description,
+           q.created_at,
+           u.name AS instructor_name
+    FROM quizzes q
+    JOIN users u ON q.instructor_id = u.id
+    WHERE q.is_published = TRUE
+    ORDER BY q.created_at DESC
+  `;
+  db.query(sql, function(err, results) {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    res.render('student-quizzes', {
+      user: req.user,
+      quizzes: results
+    });
+  });
+});
+
+// Page pour faire un quiz (côté étudiant) - Vue.js version
+router.get('/student/quizzes/:quizId/take', requireAuth, function(req, res, next) {
+  if (req.user.role !== 'student') {
+    return res.status(403).send('Access denied. Students only.');
+  }
+  const quizId = req.params.quizId;
+  // Vérifier que le quiz existe et est publié
+  db.query('SELECT id FROM quizzes WHERE id = ? AND is_published = TRUE', [quizId], function(err, results) {
+    if (err) return next(err);
+    if (results.length === 0) {
+      return res.status(404).send('Quiz not found or not published');
+    }
+    // Rendre la vue Vue.js avec juste l'ID du quiz
+    res.render('take-quiz-vue', {
+      user: req.user,
+      quizId: quizId
+    });
+  });
+});
+
+// Soumission des réponses d'un quiz
+router.post('/student/quizzes/:quizId/submit', requireAuth, function(req, res, next) {
+  if (req.user.role !== 'student') {
+    return res.status(403).send('Access denied. Students only.');
+  }
+  const quizId = req.params.quizId;
+  // 1. Récupérer le quiz
+  db.query('SELECT * FROM quizzes WHERE id = ?', [quizId], function(err, quizResults) {
+    if (err) return next(err);
+    if (quizResults.length === 0) {
+      return res.status(404).send('Quiz not found');
+    }
+    const quiz = quizResults[0];
+    // 2. Récupérer les bonnes réponses
+    db.query(
+      'SELECT id, question_text, correct_option FROM questions WHERE quiz_id = ? ORDER BY id ASC',
+      [quizId],
+      function(err2, questionRows) {
+        if (err2) return next(err2);
+        const total = questionRows.length;
+        let correct = 0;
+        const details = [];
+        questionRows.forEach(q => {
+          const fieldName = `q-${q.id}`;
+          const studentAnswer = req.body[fieldName]; // "A","B","C","D" ou undefined
+          const isCorrect = studentAnswer === q.correct_option;
+          if (isCorrect) correct++;
+          details.push({
+            question_text: q.question_text,
+            correct_option: q.correct_option,
+            student_answer: studentAnswer || 'No answer',
+            isCorrect: isCorrect
+          });
+        });
+        const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+        // Enregistrer la tentative dans la table attempts
+        const insertSql = 'INSERT INTO attempts (user_id, quiz_id, score) VALUES (?, ?, ?)';
+        db.query(insertSql, [req.user.id, quizId, score], function(err3) {
+          if (err3) {
+            console.error(err3);
+            return next(err3);
+          }
+          // Afficher la page de résultat
+          res.render('quiz-result', {
+            user: req.user,
+            quiz: quiz,
+            total: total,
+            correct: correct,
+            score: score,
+            details: details
+          });
+        });
+      }
+    );
+  });
+});
+
+// Historique des résultats de l'étudiant
+router.get('/student/results', requireAuth, function(req, res, next) {
+  if (!req.user || req.user.role !== 'student') {
+    return res.status(403).send('Access denied. Students only.');
+  }
+  const sql = `
+    SELECT 
+      a.id,
+      a.score,
+      a.created_at,
+      q.title AS quiz_title
+    FROM attempts a
+    JOIN quizzes q ON a.quiz_id = q.id
+    WHERE a.user_id = ?
+    ORDER BY a.created_at DESC
+  `;
+  db.query(sql, [req.user.id], function(err, results) {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    res.render('student-results', {
+      user: req.user,
+      attempts: results
+    });
+  });
+});
+
+
 // Liste des quizzes de l'instructor connecté
 router.get('/instructor/quizzes', requireAuth, ensureInstructor, function (req, res, next) {
   db.query(
