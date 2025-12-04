@@ -12,7 +12,7 @@ html
   body
     header
       nav.navbar
-        a.nav-brand(href='/') 🎓 Quiz Platform
+        a.nav-brand(href= user ? '/dashboard' : '/') 🎓 Quiz Platform
         
         input#nav-toggle.nav-toggle(type='checkbox')
         label.nav-toggle-label(for='nav-toggle')
@@ -28,13 +28,20 @@ html
               a(href='/student/quizzes') Available Quizzes
               a(href='/student/results') My Results
             
-            span.user-info 👤 #{user.name}
-            form.logout-form(method='POST', action='/logout')
-              button.btn-logout(type='submit') Logout
+            .user-profile-container
+              .user-avatar
+                span.avatar-circle= user.name.charAt(0).toUpperCase()
+              .user-dropdown
+                .user-info-header
+                  strong= user.name
+                  small= user.role === 'instructor' ? '👨‍🏫 Instructor' : '👨‍🎓 Student'
+                .dropdown-divider
+                form.logout-form(method='POST', action='/logout')
+                  button.btn-logout-dropdown(type='submit') 🚪 Logout
           else
             a(href='/') Home
             a(href='/login') Login
             a(href='/register') Register
-
+    
     main.container
       block content

@@ -343,3 +343,115 @@
     font-size: 2rem;
   }
 }
+
+/* ===== USER PROFILE DROPDOWN (Avatar Circle) ===== */
+.user-profile-container {
+  position: relative;
+  margin-left: auto;
+}
+
+.user-avatar {
+  cursor: pointer;
+  position: relative;
+}
+
+.avatar-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition-standard);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.avatar-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: var(--transition-standard);
+  z-index: 1000;
+}
+
+.user-profile-container:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-info-header {
+  padding-bottom: 0.8rem;
+}
+
+.user-info-header strong {
+  display: block;
+  color: #2d3748;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.user-info-header small {
+  display: block;
+  color: #718096;
+  font-size: 0.85rem;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 0.8rem 0;
+}
+
+.btn-logout-dropdown {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-standard);
+  font-size: 0.95rem;
+}
+
+.btn-logout-dropdown:hover {
+  background: #c53030;
+  transform: translateY(-1px);
+}
+
+/* Responsive mobile pour user profile */
+@media (max-width: 768px) {
+  .user-profile-container {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+  
+  .user-dropdown {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    margin-top: 1rem;
+  }
+}
+
