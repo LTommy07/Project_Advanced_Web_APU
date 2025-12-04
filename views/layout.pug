@@ -27,21 +27,23 @@ html
             else
               a(href='/student/quizzes') Available Quizzes
               a(href='/student/results') My Results
-            
-            .user-profile-container
-              .user-avatar
-                span.avatar-circle= user.name.charAt(0).toUpperCase()
-              .user-dropdown
-                .user-info-header
-                  strong= user.name
-                  small= user.role === 'instructor' ? '👨‍🏫 Instructor' : '👨‍🎓 Student'
-                .dropdown-divider
-                form.logout-form(method='POST', action='/logout')
-                  button.btn-logout-dropdown(type='submit') 🚪 Logout
           else
             a(href='/') Home
             a(href='/login') Login
             a(href='/register') Register
+        
+   
+        if user
+          .user-profile-container
+            .user-avatar
+              span.avatar-circle= user.name.charAt(0).toUpperCase()
+            .user-dropdown
+              .user-info-header
+                strong= user.name
+                small= user.role === 'instructor' ? '👨‍🏫 Instructor' : '👨‍🎓 Student'
+              .dropdown-divider
+              form.logout-form(method='POST', action='/logout')
+                button.btn-logout-dropdown(type='submit') 🚪 Logout
     
     main.container
       block content
