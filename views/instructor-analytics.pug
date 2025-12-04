@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  .dashboard-container
+    .welcome-card
+      h1 📈 Analytics Dashboard
+      p View performance statistics for all your quizzes
+    
+    if quizzes && quizzes.length > 0
+      .quiz-grid
+        each quiz in quizzes
+          .quiz-card
+            h3= quiz.title
+            
+            .quiz-meta
+              p
+                strong Total Attempts: 
+                span= quiz.total_attempts || 0
+              p
+                strong Average Score: 
+                span= quiz.average_score ? Math.round(quiz.average_score) + '%' : 'N/A'
+              p
+                strong Unique Students: 
+                span= quiz.unique_students || 0
+              p
+                strong Status: 
+                if quiz.is_published
+                  span.badge.badge-published Published
+                else
+                  span.badge.badge-draft Draft
+            
+            a.btn-take-quiz(href=`/instructor/quizzes/${quiz.id}/results`) 
+              | View Detailed Results →
+    else
+      .card
+        p(style="text-align: center; color: #666; padding: 2rem;") No quizzes created yet.
+    
+    .results-link
+      a(href='/dashboard') ← Back to Dashboard

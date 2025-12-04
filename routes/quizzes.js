@@ -164,6 +164,8 @@ router.get('/student/results', requireAuth, function(req, res, next) {
 });
 
 
+
+
 // Liste des quizzes de l'instructor connecté
 router.get('/instructor/quizzes', requireAuth, ensureInstructor, function (req, res, next) {
   db.query(
@@ -540,6 +542,35 @@ router.get('/instructor/quizzes/:quizId/results', requireAuth, ensureInstructor,
     }
   );
 });
+
+// Ajouter cette route dans quizzes.js
+router.get('/instructor/analytics', requireAuth, ensureInstructor, function(req, res, next) {
+  // Récupérer tous les quiz de l'instructor avec statistiques
+  const sql = `
+    SELECT 
+      q.id,
+      q.title,
+      q.is_published,
+      COUNT(DISTINCT a.id) as total_attempts,
+      AVG(a.score) as average_score,
+      COUNT(DISTINCT a.user_id) as unique_students
+    FROM quizzes q
+    LEFT JOIN attempts a ON q.id = a.quiz_id
+    WHERE q.instructor_id = ?
+    GROUP BY q.id
+    ORDER BY q.created_at DESC
+  `;
+  
+  db.query(sql, [req.user.id], function(err, results) {
+    if (err) return next(err);
+    
+    res.render('instructor-analytics', {
+      user: req.user,
+      quizzes: results
+    });
+  });
+});
+
 
 // ✨ Détails d'une tentative spécifique (pour voir les réponses question par question)
 router.get('/instructor/attempts/:attemptId/details', requireAuth, ensureInstructor, function(req, res, next) {
