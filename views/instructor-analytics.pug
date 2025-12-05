@@ -1,39 +1,72 @@
 extends layout
 
 block content
-  .dashboard-container
-    .welcome-card
-      h1 📈 Analytics Dashboard
-      p View performance statistics for all your quizzes
+  .analytics-container
+    h1 📈 Analytics Dashboard
     
-    if quizzes && quizzes.length > 0
-      .quiz-grid
-        each quiz in quizzes
-          .quiz-card
-            h3= quiz.title
-            
-            .quiz-meta
-              p
-                strong Total Attempts: 
-                span= quiz.total_attempts || 0
-              p
-                strong Average Score: 
-                span= quiz.average_score ? Math.round(quiz.average_score) + '%' : 'N/A'
-              p
-                strong Unique Students: 
-                span= quiz.unique_students || 0
-              p
-                strong Status: 
-                if quiz.is_published
-                  span.badge.badge-published Published
+    //- TOP PERFORMERS SECTION
+    if topPerformers && topPerformers.length > 0
+      .top-performers-section
+        h2 🏆 Top Performers
+        .performers-grid
+          each performer, index in topPerformers
+            .performer-card(class=index < 3 ? `rank-${index + 1}` : '')
+              .performer-rank
+                if index === 0
+                  span.medal 🥇
+                else if index === 1
+                  span.medal 🥈
+                else if index === 2
+                  span.medal 🥉
                 else
-                  span.badge.badge-draft Draft
-            
-            a.btn-take-quiz(href=`/instructor/quizzes/${quiz.id}/results`) 
-              | View Detailed Results →
-    else
-      .card
-        p(style="text-align: center; color: #666; padding: 2rem;") No quizzes created yet.
+                  span.rank-number= `#${index + 1}`
+              
+              .performer-info
+                .performer-avatar= performer.name.charAt(0).toUpperCase()
+                .performer-details
+                  h3= performer.name
+                  p.performer-email= performer.email
+              
+              .performer-stats
+                .stat
+                  span.stat-label Quizzes:
+                  span.stat-value= performer.total_quizzes
+                .stat
+                  span.stat-label Avg Score:
+                  span.stat-value(class=performer.average_score >= 70 ? 'score-good' : 'score-low')
+                    = Math.round(performer.average_score) + '%'
+                .stat
+                  span.stat-label Best:
+                  span.stat-value= performer.best_score + '%'
+                .stat
+                  span.stat-label Points:
+                  span.stat-value= performer.total_points
     
-    .results-link
-      a(href='/dashboard') ← Back to Dashboard
+    //- QUIZ STATS SECTION
+    if quizzes && quizzes.length > 0
+      .quiz-stats-section
+        h2 📊 Quiz Statistics
+        .quiz-stats-grid
+          each quiz in quizzes
+            .quiz-stat-card
+              h3= quiz.title
+              .stats
+                .stat-item
+                  span.stat-label Total Attempts:
+                  span.stat-value= quiz.total_attempts || 0
+                .stat-item
+                  span.stat-label Average Score:
+                  span.stat-value= quiz.average_score ? Math.round(quiz.average_score) + '%' : 'N/A'
+                .stat-item
+                  span.stat-label Unique Students:
+                  span.stat-value= quiz.unique_students || 0
+                .stat-item
+                  span.stat-label Status:
+                  span(class=quiz.is_published ? 'badge-published' : 'badge-draft')
+                    = quiz.is_published ? 'Published' : 'Draft'
+              a.view-details-btn(href=`/instructor/quizzes/${quiz.id}/results`) 
+                | View Detailed Results →
+    else
+      p.no-data No quizzes created yet.
+    
+    a.back-link(href='/dashboard') ← Back to Dashboard

@@ -543,10 +543,10 @@ router.get('/instructor/quizzes/:quizId/results', requireAuth, ensureInstructor,
   );
 });
 
-// Ajouter cette route dans quizzes.js
+// Route analytics avec top performers
 router.get('/instructor/analytics', requireAuth, ensureInstructor, function(req, res, next) {
-  // Récupérer tous les quiz de l'instructor avec statistiques
-  const sql = `
+  // 1. Stats des quiz
+  const sqlQuizzes = `
     SELECT 
       q.id,
       q.title,
@@ -561,15 +561,40 @@ router.get('/instructor/analytics', requireAuth, ensureInstructor, function(req,
     ORDER BY q.created_at DESC
   `;
   
-  db.query(sql, [req.user.id], function(err, results) {
+  // 2. Top performers (meilleurs étudiants)
+  const sqlTopPerformers = `
+    SELECT 
+      u.id,
+      u.name,
+      u.email,
+      COUNT(a.id) as total_quizzes,
+      AVG(a.score) as average_score,
+      MAX(a.score) as best_score,
+      SUM(a.total_points) as total_points
+    FROM users u
+    INNER JOIN attempts a ON u.id = a.user_id
+    INNER JOIN quizzes q ON a.quiz_id = q.id
+    WHERE q.instructor_id = ? AND u.role = 'student'
+    GROUP BY u.id
+    ORDER BY average_score DESC, total_points DESC
+    LIMIT 10
+  `;
+  
+  db.query(sqlQuizzes, [req.user.id], function(err, quizzes) {
     if (err) return next(err);
     
-    res.render('instructor-analytics', {
-      user: req.user,
-      quizzes: results
+    db.query(sqlTopPerformers, [req.user.id], function(err2, topPerformers) {
+      if (err2) return next(err2);
+      
+      res.render('instructor-analytics', {
+        user: req.user,
+        quizzes: quizzes,
+        topPerformers: topPerformers
+      });
     });
   });
 });
+
 
 
 // ✨ Détails d'une tentative spécifique (pour voir les réponses question par question)

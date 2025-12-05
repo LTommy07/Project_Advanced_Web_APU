@@ -6,8 +6,33 @@ block content
       h1 My Quizzes
       a.btn-add(href='/instructor/quizzes/new') + Create New Quiz
 
+    //- ✨ NOUVELLE SECTION: Search & Filters
     if quizzes && quizzes.length > 0
-      table.table-modern
+      .search-filter-container
+        .search-box
+          input#searchInput(
+            type='text',
+            placeholder='🔍 Search quizzes...',
+            onkeyup='filterQuizzes()'
+          )
+        
+        .filter-box
+          label(for='statusFilter') Status:
+          select#statusFilter(onchange='filterQuizzes()')
+            option(value='all') All
+            option(value='published') Published
+            option(value='draft') Draft
+          
+          label(for='sortBy') Sort:
+          select#sortBy(onchange='sortQuizzes()')
+            option(value='date-desc') Newest First
+            option(value='date-asc') Oldest First
+            option(value='title-asc') Title (A-Z)
+            option(value='title-desc') Title (Z-A)
+
+    //- TON TABLEAU EXISTANT (avec juste data-attributes ajoutés)
+    if quizzes && quizzes.length > 0
+      table.table-modern#quizTable
         thead
           tr
             th Title
@@ -18,7 +43,11 @@ block content
             th Actions
         tbody
           each quiz in quizzes
-            tr
+            tr(
+              data-title=quiz.title.toLowerCase(),
+              data-status=quiz.is_published ? 'published' : 'draft',
+              data-date=quiz.created_at
+            )
               td= quiz.title
               td= quiz.description || 'N/A'
               td
@@ -38,3 +67,52 @@ block content
     else
       .empty-state
         p No quizzes yet. Create your first quiz!
+
+  //- ✨ JAVASCRIPT pour le filtering/sorting
+  script.
+    function filterQuizzes() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const table = document.getElementById('quizTable');
+      if (!table) return;
+      
+      const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+      
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const title = row.getAttribute('data-title');
+        const status = row.getAttribute('data-status');
+        
+        const matchesSearch = title.includes(searchInput);
+        const matchesStatus = statusFilter === 'all' || status === statusFilter;
+        
+        if (matchesSearch && matchesStatus) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    }
+    
+    function sortQuizzes() {
+      const sortBy = document.getElementById('sortBy').value;
+      const table = document.getElementById('quizTable');
+      if (!table) return;
+      
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = Array.from(tbody.getElementsByTagName('tr'));
+      
+      rows.sort((a, b) => {
+        if (sortBy === 'title-asc') {
+          return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+        } else if (sortBy === 'title-desc') {
+          return b.getAttribute('data-title').localeCompare(a.getAttribute('data-title'));
+        } else if (sortBy === 'date-asc') {
+          return new Date(a.getAttribute('data-date')) - new Date(b.getAttribute('data-date'));
+        } else { // date-desc (default)
+          return new Date(b.getAttribute('data-date')) - new Date(a.getAttribute('data-date'));
+        }
+      });
+      
+      rows.forEach(row => tbody.appendChild(row));
+    }
