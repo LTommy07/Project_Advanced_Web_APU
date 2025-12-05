@@ -446,13 +446,13 @@
     margin-top: 1rem;
   }
   
-  .user-dropdown {
+ /* .user-dropdown {
     position: static;
     opacity: 1;
     visibility: visible;
     transform: none;
     margin-top: 1rem;
-  }
+  }*/
 }
 /* ===== TOP PERFORMERS ===== */
 .top-performers-section {
