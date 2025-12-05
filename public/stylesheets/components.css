@@ -773,6 +773,243 @@
   border-color: #667eea;
 }
 
+/* ========================================
+   STUDENT RESULTS PAGE STYLES
+======================================== */
+
+.results-container {
+  margin-top: 2rem;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Stats Summary Cards */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Modern Table */
+.table-wrapper {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.modern-table thead th {
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.modern-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+}
+
+.modern-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.modern-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.modern-table tbody td {
+  padding: 1.2rem 1.5rem;
+}
+
+/* Quiz Name Cell */
+.quiz-name {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.quiz-icon {
+  font-size: 1.3rem;
+}
+
+/* Score Cell */
+.score-cell {
+  text-align: center;
+}
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.score-badge.excellent {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+}
+
+.score-badge.good {
+  background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+  color: white;
+}
+
+.score-badge.needs-improvement {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.score-percent {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.score-max {
+  opacity: 0.8;
+}
+
+/* Date Cell */
+.date-cell {
+  color: #666;
+}
+
+.date-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.date-main {
+  font-weight: 500;
+  color: #333;
+}
+
+.date-time {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+/* Row Colors */
+.modern-table tbody tr.pass {
+  border-left: 4px solid #38ef7d;
+}
+
+.modern-table tbody tr.fail {
+  border-left: 4px solid #f5576c;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stats-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .modern-table {
+    min-width: 600px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .actions .btn {
+    width: 100%;
+  }
+}
+
+
 
 
 

@@ -1,22 +1,61 @@
 extends layout
 
 block content
-  .page
-    h1 My results
-
-    if attempts.length === 0
-      p You haven't taken any quiz yet.
-    else
-      table.results-table
-        thead
-          tr
-            th Quiz
-            th Score
-            th Date
-        tbody
-          each attempt in attempts
-            tr
-              td= attempt.quiz_title
-              td #{attempt.score} + '%'
-              td= attempt.created_at.toLocaleString ? attempt.created_at.toLocaleString() : attempt.created_at
-    a.button(href="/student/quizzes") Back to quizzes
+  .page-container
+    .page-header
+      h1 📊 My Results
+      p.subtitle View your quiz attempt history and performance
+    
+    .results-container
+      if attempts.length === 0
+        .empty-state
+          .empty-icon 📝
+          h2 No Results Yet
+          p You haven't taken any quizzes yet.
+          a.btn.btn-primary(href="/student/quizzes") Browse Available Quizzes
+      else
+        .stats-summary
+          .stat-card
+            .stat-icon 🎯
+            .stat-info
+              .stat-value= attempts.length
+              .stat-label Total Attempts
+          .stat-card
+            .stat-icon ⭐
+            .stat-info
+              .stat-value #{Math.round(attempts.reduce((acc, a) => acc + a.score, 0) / attempts.length)}%
+              .stat-label Average Score
+          .stat-card
+            .stat-icon 🏆
+            .stat-info
+              .stat-value #{attempts.filter(a => a.score >= 70).length}
+              .stat-label Passed Quizzes
+        
+        .table-wrapper
+          table.modern-table
+            thead
+              tr
+                th.col-quiz QUIZ
+                th.col-score SCORE
+                th.col-date DATE
+            tbody
+              each attempt in attempts
+                tr(class=attempt.score >= 70 ? 'pass' : 'fail')
+                  td.quiz-name
+                    span.quiz-icon 📚
+                    = attempt.quiz_title
+                  td.score-cell
+                    .score-badge(class=attempt.score >= 90 ? 'excellent' : attempt.score >= 70 ? 'good' : 'needs-improvement')
+                      span.score-value #{attempt.total_points || attempt.score}
+                      if attempt.max_points
+                        span.score-max  / #{attempt.max_points}
+                      span.score-percent  (#{attempt.score}%)
+                  td.date-cell
+                    .date-info
+                      .date-main= new Date(attempt.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                      .date-time= new Date(attempt.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+        
+        .actions
+          a.btn.btn-primary(href="/student/quizzes") 
+            span ← 
+            | Back to Quizzes
