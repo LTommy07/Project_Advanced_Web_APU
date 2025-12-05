@@ -196,14 +196,9 @@
     padding: 0.5rem;
   }
 
-      /* Tableaux scrollables horizontalement sur mobile (My Quizzes) */
-    .table-modern {
-          display: block;
+    /* Table wrapper scrollable horizontalement sur mobile (My Quizzes) */
+    .table-wrapper-scroll {
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
-        }
-
-    .table-modern table {
-          min-width: 700px;
         }
 }
