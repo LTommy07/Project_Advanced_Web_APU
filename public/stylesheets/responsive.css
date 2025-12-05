@@ -190,12 +190,6 @@
     flex-direction: column;
     gap: 0.5rem;
   }
-
-        /* Table wrapper scrollable horizontalement sur mobile (My Quizzes) */
-      .table-wrapper-scroll {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
   
   /* Container */
   .container {
