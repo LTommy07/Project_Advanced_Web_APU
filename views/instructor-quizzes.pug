@@ -32,38 +32,39 @@ block content
 
     //- TON TABLEAU EXISTANT (avec juste data-attributes ajoutés)
     if quizzes && quizzes.length > 0
-      table.table-modern#quizTable
-        thead
-          tr
-            th Title
-            th Description
-            th Status
-            th Time Limit
-            th Created
-            th Actions
-        tbody
-          each quiz in quizzes
-            tr(
-              data-title=quiz.title.toLowerCase(),
-              data-status=quiz.is_published ? 'published' : 'draft',
-              data-date=quiz.created_at
-            )
-              td= quiz.title
-              td= quiz.description || 'N/A'
-              td
-                span(class=quiz.is_published ? 'badge published' : 'badge draft')= quiz.is_published ? 'Published' : 'Draft'
-              td= quiz.time_limit ? quiz.time_limit + ' min' : 'No limit'
-              td= new Date(quiz.created_at).toLocaleDateString()
-              td
-                a(href=`/instructor/quizzes/${quiz.id}/questions`) Manage Questions
-                | &nbsp;|&nbsp;
-                a(href=`/instructor/quizzes/${quiz.id}/results`) View Results
-                | &nbsp;|&nbsp;
-                form(method='POST', action=`/instructor/quizzes/${quiz.id}/toggle-publish`, style='display:inline')
-                  button(type='submit', class=quiz.is_published ? 'btn-unpublish' : 'btn-publish')= quiz.is_published ? 'Unpublish' : 'Publish'
-                | &nbsp;|&nbsp;
-                form(method='POST', action=`/instructor/quizzes/${quiz.id}/delete`, style='display:inline', onsubmit='return confirm("Are you sure you want to delete this quiz? This cannot be undone.")')
-                  button(type='submit', class='btn-delete') Delete
+      .table-container
+        table.table-modern#quizTable
+          thead
+            tr
+              th Title
+              th Description
+              th Status
+              th Time Limit
+              th Created
+              th Actions
+          tbody
+            each quiz in quizzes
+              tr(
+                data-title=quiz.title.toLowerCase(),
+                data-status=quiz.is_published ? 'published' : 'draft',
+                data-date=quiz.created_at
+              )
+                td= quiz.title
+                td= quiz.description || 'N/A'
+                td
+                  span(class=quiz.is_published ? 'badge published' : 'badge draft')= quiz.is_published ? 'Published' : 'Draft'
+                td= quiz.time_limit ? quiz.time_limit + ' min' : 'No limit'
+                td= new Date(quiz.created_at).toLocaleDateString()
+                td
+                  a(href=`/instructor/quizzes/${quiz.id}/questions`) Manage Questions
+                  | &nbsp;|&nbsp;
+                  a(href=`/instructor/quizzes/${quiz.id}/results`) View Results
+                  | &nbsp;|&nbsp;
+                  form(method='POST', action=`/instructor/quizzes/${quiz.id}/toggle-publish`, style='display:inline')
+                    button(type='submit', class=quiz.is_published ? 'btn-unpublish' : 'btn-publish')= quiz.is_published ? 'Unpublish' : 'Publish'
+                  | &nbsp;|&nbsp;
+                  form(method='POST', action=`/instructor/quizzes/${quiz.id}/delete`, style='display:inline', onsubmit='return confirm("Are you sure you want to delete this quiz? This cannot be undone.")')
+                    button(type='submit', class='btn-delete') Delete
     else
       .empty-state
         p No quizzes yet. Create your first quiz!

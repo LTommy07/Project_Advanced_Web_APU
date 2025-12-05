@@ -197,3 +197,17 @@
   }
 
 }
+
+@media (max-width: 768px) {
+    /* Wrapper scrollable pour le tableau */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -1rem; /* Compense le padding du container parent */
+    }
+    
+    .table-modern {
+        min-width: 800px; /* Force le tableau à garder sa largeur */
+    }
+}
+
