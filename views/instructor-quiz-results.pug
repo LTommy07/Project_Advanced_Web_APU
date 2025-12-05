@@ -1,65 +1,91 @@
 extends layout
 
 block content
-  h1 Results for "#{quiz.title}"
-  
-  p Total Attempts: #{attempts.length}
-  
-  if attempts && attempts.length > 0
-    table
-      thead
-        tr
-          th Student
-          th Email
-          th Score
-          th Points
-          th Time Taken
-          th Date
-          th Actions
-      tbody
-        each attempt in attempts
-          tr
-            td= attempt.student_name
-            td= attempt.student_email
-            td 
-              span(class=attempt.score >= 70 ? 'score-good' : 'score-low')= attempt.score + '%'
-            td= attempt.total_points + '/' + attempt.max_points
-            td= attempt.time_taken ? Math.floor(attempt.time_taken / 60) + ' min ' + (attempt.time_taken % 60) + ' sec' : 'N/A'
-            td= new Date(attempt.created_at).toLocaleString()
-            td
-              a(href=`/instructor/attempts/${attempt.id}/details`) View Details
-  else
-    p No attempts yet.
-  
-  a(href='/instructor/quizzes') Back to My Quizzes
-
-  style.
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-    }
-    .score-good {
-      color: #28a745;
-      font-weight: bold;
-    }
-    .score-low {
-      color: #dc3545;
-      font-weight: bold;
-    }
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+  .page-container
+    .page-header
+      h1 📊 Results for "#{quiz.title}"
+      p.subtitle View detailed analytics for all student attempts
+    
+    .stats-summary
+      .stat-card
+        .stat-icon 👥
+        .stat-info
+          .stat-value= attempts.length
+          .stat-label Total Attempts
+      
+      .stat-card
+        .stat-icon ⭐
+        .stat-info
+          - var avgScore = attempts.length > 0 ? Math.round(attempts.reduce((sum, a) => sum + a.score, 0) / attempts.length) : 0
+          .stat-value #{avgScore}%
+          .stat-label Average Score
+      
+      .stat-card
+        .stat-icon 🏆
+        .stat-info
+          - var passedCount = attempts.filter(a => a.score >= 70).length
+          .stat-value #{passedCount}
+          .stat-label Passed (≥70%)
+      
+      .stat-card
+        .stat-icon 📉
+        .stat-info
+          - var failedCount = attempts.filter(a => a.score < 70).length
+          .stat-value #{failedCount}
+          .stat-label Failed (<70%)
+    
+    //- Utilise .table-container au lieu de .results-container
+    .table-container
+      if attempts && attempts.length > 0
+        table.table-modern
+          thead
+            tr
+              th STUDENT
+              th EMAIL
+              th SCORE
+              th POINTS
+              th TIME
+              th DATE
+              th ACTIONS
+          tbody
+            each attempt in attempts
+              tr(class=attempt.score >= 70 ? 'pass' : 'fail')
+                td.quiz-name
+                  span.quiz-icon= attempt.student_name.charAt(0).toUpperCase()
+                  = attempt.student_name
+                
+                td= attempt.student_email
+                
+                td.score-cell
+                  .score-badge(class=attempt.score >= 90 ? 'excellent' : attempt.score >= 70 ? 'good' : 'needs-improvement')
+                    span.score-value #{attempt.score}%
+                
+                td.score-cell
+                  span.score-value #{attempt.total_points}
+                  span.score-max  / #{attempt.max_points}
+                
+                td
+                  if attempt.time_taken
+                    - var minutes = Math.floor(attempt.time_taken / 60)
+                    - var seconds = attempt.time_taken % 60
+                    span #{minutes}m #{seconds}s
+                  else
+                    span N/A
+                
+                td.date-cell
+                  .date-info
+                    .date-main= new Date(attempt.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                    .date-time= new Date(attempt.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                
+                td
+                  a.btn.btn-primary(href=`/instructor/attempts/${attempt.id}/details`) View Details
+      else
+        .empty-state
+          .empty-icon 📭
+          h2 No Attempts Yet
+          p Students haven't taken this quiz yet.
+    
+    .actions
+      a.btn.btn-secondary(href='/instructor/quizzes') 
+        span ← 
+        | Back to Quizzes

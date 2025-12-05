@@ -1313,6 +1313,33 @@
   }
 }
 
+/* ========================================
+   INSTRUCTOR QUIZ RESULTS - FIX BOUTON
+======================================== */
+
+/* Fix bouton "View Details" trop petit */
+.table-modern .btn-primary {
+  padding: 0.7rem 1.5rem !important;
+  font-size: 0.9rem !important;
+  white-space: nowrap;
+}
+
+/* Subtitle dans le header */
+.page-header .subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
+}
+
+/* Bordures colorées pour pass/fail */
+.table-modern tbody tr.pass {
+  border-left: 4px solid #38ef7d;
+}
+
+.table-modern tbody tr.fail {
+  border-left: 4px solid #f5576c;
+}
+
 
 
 
