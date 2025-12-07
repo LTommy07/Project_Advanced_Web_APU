@@ -38,6 +38,7 @@ block content
                 th.col-quiz QUIZ
                 th.col-score SCORE
                 th.col-date DATE
+                th.col-actions ACTIONS
             tbody
               each attempt in attempts
                 tr(class=attempt.score >= 70 ? 'pass' : 'fail')
@@ -54,7 +55,10 @@ block content
                     .date-info
                       .date-main= new Date(attempt.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
                       .date-time= new Date(attempt.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-        
+                  td.actions-cell
+                    a.btn.btn-primary.btn-sm(href=`/student/attempts/${attempt.id}/details`) 
+                      span 👁️ 
+                      | Review
         .actions
           a.btn.btn-primary(href="/student/quizzes") 
             span ← 

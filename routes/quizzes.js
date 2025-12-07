@@ -841,6 +841,62 @@ router.post('/instructor/quizzes/:quizId/questions/:questionId/edit',
   }
 );
 
+// ========================================
+// STUDENT - VIEW OWN ATTEMPT DETAILS
+// ========================================
+router.get('/student/attempts/:attemptId/details', requireAuth, function(req, res, next) {
+  if (req.user.role !== 'student') {
+    return res.status(403).send('Access denied: Students only.');
+  }
+  
+  const attemptId = req.params.attemptId;
+  
+  // Step 1: Get attempt with quiz info
+  db.query(
+    `SELECT a.*, 
+            q.title as quiz_title
+     FROM attempts a
+     JOIN quizzes q ON a.quiz_id = q.id
+     WHERE a.id = ? AND a.user_id = ?`,
+    [attemptId, req.user.id],
+    function(err, attemptRows) {
+      if (err) return next(err);
+      
+      if (attemptRows.length === 0) {
+        return res.status(404).send('Attempt not found or access denied.');
+      }
+      
+      const attempt = attemptRows[0];
+      
+      // Step 2: Get attempt details with questions
+      db.query(
+        `SELECT ad.*,
+                q.question_text,
+                q.option_a,
+                q.option_b,
+                q.option_c,
+                q.option_d,
+                q.correct_option,
+                q.points
+         FROM attempt_details ad
+         JOIN questions q ON ad.question_id = q.id
+         WHERE ad.attempt_id = ?
+         ORDER BY q.id ASC`,
+        [attemptId],
+        function(err2, details) {
+          if (err2) return next(err2);
+          
+          res.render('student-attempt-details', {
+            user: req.user,
+            attempt: attempt,
+            details: details
+          });
+        }
+      );
+    }
+  );
+});
+
 
 
 module.exports = router;

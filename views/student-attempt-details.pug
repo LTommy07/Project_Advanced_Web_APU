@@ -1,0 +1,129 @@
+extends layout
+
+block content
+  .page-container
+    //- Header with gradient
+    .quiz-header
+      .quiz-title-section
+        h1 📊 Your Quiz Attempt
+        p.quiz-description Review your answers and performance
+        .quiz-meta-info
+          span.meta-label Quiz: 
+          span.meta-value #{attempt.quiz_title}
+    
+    //- Stats Summary Cards
+    .stats-summary
+      .stat-card
+        .stat-icon 🎯
+        .stat-info
+          span.stat-value #{attempt.score}%
+          span.stat-label Your Score
+      
+      .stat-card
+        .stat-icon ⭐
+        .stat-info
+          span.stat-value #{attempt.total_points}/#{attempt.max_points}
+          span.stat-label Points Earned
+      
+      if attempt.time_taken
+        .stat-card
+          .stat-icon ⏱️
+          .stat-info
+            span.stat-value #{Math.floor(attempt.time_taken / 60)}:#{String(attempt.time_taken % 60).padStart(2, '0')}
+            span.stat-label Time Taken
+      
+      .stat-card
+        .stat-icon 📅
+        .stat-info
+          span.stat-value= new Date(attempt.created_at).toLocaleDateString()
+          span.stat-label Date
+    
+    //- Performance Message
+    .performance-message(class=attempt.score >= 80 ? 'excellent' : (attempt.score >= 50 ? 'good' : 'needs-improvement'))
+      if attempt.score >= 80
+        .message-icon 🎉
+        h3 Excellent Work!
+        p You scored #{attempt.score}%. Keep up the great work!
+      else if attempt.score >= 50
+        .message-icon 💪
+        h3 Good Job!
+        p You scored #{attempt.score}%. Review the questions below to improve further.
+      else
+        .message-icon 📚
+        h3 Keep Practicing!
+        p You scored #{attempt.score}%. Review the correct answers below to learn and improve.
+    
+    //- Responses Section
+    .section-header
+      h2 📝 Your Answers
+      if details && details.length > 0
+        span.question-count #{details.length} question(s)
+    
+    if details && details.length > 0
+      .questions-list
+        each detail, index in details
+          .question-card(class=detail.is_correct ? 'correct-answer-card' : 'incorrect-answer-card')
+            .question-header
+              .question-info
+                span.question-number ##{index + 1}
+                span.question-points #{detail.points} pt(s)
+              
+              if detail.is_correct
+                span.badge.badge-success ✓ Correct
+              else
+                span.badge.badge-error ✗ Incorrect
+            
+            .question-body
+              p.question-text= detail.question_text
+              
+              .options-grid
+                .option-item(class=detail.correct_option === 'A' ? 'correct-answer' : (detail.student_answer === 'A' && !detail.is_correct ? 'student-wrong-answer' : ''))
+                  span.option-letter A
+                  span.option-text= detail.option_a
+                  if detail.correct_option === 'A'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'A' && !detail.is_correct
+                    span.wrong-icon ✗
+                
+                .option-item(class=detail.correct_option === 'B' ? 'correct-answer' : (detail.student_answer === 'B' && !detail.is_correct ? 'student-wrong-answer' : ''))
+                  span.option-letter B
+                  span.option-text= detail.option_b
+                  if detail.correct_option === 'B'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'B' && !detail.is_correct
+                    span.wrong-icon ✗
+                
+                .option-item(class=detail.correct_option === 'C' ? 'correct-answer' : (detail.student_answer === 'C' && !detail.is_correct ? 'student-wrong-answer' : ''))
+                  span.option-letter C
+                  span.option-text= detail.option_c
+                  if detail.correct_option === 'C'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'C' && !detail.is_correct
+                    span.wrong-icon ✗
+                
+                .option-item(class=detail.correct_option === 'D' ? 'correct-answer' : (detail.student_answer === 'D' && !detail.is_correct ? 'student-wrong-answer' : ''))
+                  span.option-letter D
+                  span.option-text= detail.option_d
+                  if detail.correct_option === 'D'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'D' && !detail.is_correct
+                    span.wrong-icon ✗
+              
+              .answer-summary
+                .answer-row
+                  span.answer-label Your answer:
+                  span.answer-value(class=detail.is_correct ? 'text-success' : 'text-danger')= detail.student_answer || 'No answer'
+                .answer-row
+                  span.answer-label Points earned:
+                  span.answer-value.points-earned #{detail.points_earned}/#{detail.points}
+    else
+      .empty-state-questions
+        .empty-icon 📭
+        h3 No Details Available
+        p No response details found for this attempt.
+    
+    //- Back Button
+    .form-actions
+      a.btn.btn-secondary(href='/student/results') 
+        span ← 
+        | Back to My Results
