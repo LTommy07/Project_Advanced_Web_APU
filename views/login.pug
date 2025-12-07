@@ -9,7 +9,7 @@ block content
       if error
         .alert.alert-error= error
 
-      form(method='POST', action='/login')
+      form.login-form(method='POST', action='/login')
         .form-group
           label(for='email') Email Address
           input#email(
@@ -31,8 +31,38 @@ block content
             title='Password must be at least 6 characters'
           )
 
-        button(type='submit') Login
+        button.btn-submit(type='submit') Login
 
       .auth-link
         p Don't have an account? 
           a(href='/register') Register here
+  
+  //- ✨ ADD: Client-side validation with Toast & Spinner
+  script.
+    const form = document.querySelector('.login-form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    form.addEventListener('submit', function(e) {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      // Validation
+      if (!email || !password) {
+        e.preventDefault();
+        Toast.error('Please fill in all fields');
+        return false;
+      }
+      
+      if (password.length < 6) {
+        e.preventDefault();
+        Toast.warning('Password must be at least 6 characters');
+        return false;
+      }
+      
+      // Add loading state to button
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+      
+      // Show spinner overlay
+      Spinner.show('Logging in...');
+    });

@@ -6,7 +6,7 @@ block content
       h1 My Quizzes
       a.btn-add(href='/instructor/quizzes/new') + Create New Quiz
 
-    //- ✨ NOUVELLE SECTION: Search & Filters
+    //-  SECTION: Search & Filters
     if quizzes && quizzes.length > 0
       .search-filter-container
         .search-box
@@ -30,7 +30,7 @@ block content
             option(value='title-asc') Title (A-Z)
             option(value='title-desc') Title (Z-A)
 
-    //- TON TABLEAU EXISTANT (avec juste data-attributes ajoutés)
+   
     if quizzes && quizzes.length > 0
       .table-container
         table.table-modern#quizTable
@@ -60,17 +60,84 @@ block content
                   | &nbsp;|&nbsp;
                   a(href=`/instructor/quizzes/${quiz.id}/results`) View Results
                   | &nbsp;|&nbsp;
-                  form(method='POST', action=`/instructor/quizzes/${quiz.id}/toggle-publish`, style='display:inline')
+                  
+                  form.toggle-publish-form(method='POST', action=`/instructor/quizzes/${quiz.id}/toggle-publish`, style='display:inline')
                     button(type='submit', class=quiz.is_published ? 'btn-unpublish' : 'btn-publish')= quiz.is_published ? 'Unpublish' : 'Publish'
                   | &nbsp;|&nbsp;
-                  form(method='POST', action=`/instructor/quizzes/${quiz.id}/delete`, style='display:inline', onsubmit='return confirm("Are you sure you want to delete this quiz? This cannot be undone.")')
+                  
+                  form.delete-quiz-form(method='POST', action=`/instructor/quizzes/${quiz.id}/delete`, style='display:inline')
                     button(type='submit', class='btn-delete') Delete
     else
       .empty-state
         p No quizzes yet. Create your first quiz!
 
-  //- ✨ JAVASCRIPT pour le filtering/sorting
+  
   script.
+    // ========================================
+    // SUCCESS TOASTS (from URL params)
+    // ========================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    
+    if (success === 'quiz_created') {
+      Toast.success('Quiz created successfully! 🎉');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (success === 'quiz_published') {
+      Toast.success('Quiz published successfully! ✅');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (success === 'quiz_unpublished') {
+      Toast.info('Quiz unpublished 📝');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (success === 'quiz_deleted') {
+      Toast.success('Quiz deleted successfully 🗑️');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (success === 'question_added') {
+      Toast.success('Question added successfully! ✅');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (success === 'question_updated') {
+      Toast.success('Question updated successfully! ✏️');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (success === 'question_deleted') {
+      Toast.success('Question deleted successfully! 🗑️');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    // ========================================
+    // TOGGLE PUBLISH WITH SPINNER
+    // ========================================
+    document.querySelectorAll('.toggle-publish-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        const btn = form.querySelector('button[type="submit"]');
+        const isPublishing = btn.classList.contains('btn-publish');
+        
+        btn.classList.add('loading');
+        btn.disabled = true;
+        
+        Spinner.show(isPublishing ? 'Publishing quiz...' : 'Unpublishing quiz...');
+      });
+    });
+    
+    // ========================================
+    // DELETE QUIZ WITH CONFIRMATION & SPINNER
+    // ========================================
+    document.querySelectorAll('.delete-quiz-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (confirm('⚠️ Delete this quiz?\n\nThis will also delete all questions and student attempts.\n\nThis action cannot be undone.')) {
+          const btn = form.querySelector('button[type="submit"]');
+          btn.classList.add('loading');
+          btn.disabled = true;
+          
+          Spinner.show('Deleting quiz...');
+          form.submit();
+        }
+      });
+    });
+    
+    // ========================================
+    // FILTER QUIZZES (existing function)
+    // ========================================
     function filterQuizzes() {
       const searchInput = document.getElementById('searchInput').value.toLowerCase();
       const statusFilter = document.getElementById('statusFilter').value;
@@ -78,6 +145,7 @@ block content
       if (!table) return;
       
       const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+      let visibleCount = 0;
       
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
@@ -89,12 +157,21 @@ block content
         
         if (matchesSearch && matchesStatus) {
           row.style.display = '';
+          visibleCount++;
         } else {
           row.style.display = 'none';
         }
       }
+      
+      //   Show toast if no results
+      if (visibleCount === 0 && (searchInput || statusFilter !== 'all')) {
+        Toast.info('No quizzes match your filters');
+      }
     }
     
+    // ========================================
+    // SORT QUIZZES (existing function)
+    // ========================================
     function sortQuizzes() {
       const sortBy = document.getElementById('sortBy').value;
       const table = document.getElementById('quizTable');
