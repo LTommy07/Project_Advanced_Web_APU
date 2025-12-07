@@ -1,6 +1,6 @@
 # 📘 AWP Quiz Platform
 
-**Student:** Noam SLEZACK  
+**Student:** Noam SLEZACK ,Tommy LIM ,Andrea DARIO
 **Intake:** APUFEFREI2509  
 **Module:** Advanced Web Programming
 
