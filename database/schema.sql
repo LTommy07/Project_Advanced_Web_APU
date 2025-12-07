@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- ⚠️ RESET: Drop database to start fresh every time
-DROP DATABASE IF EXISTS awp_quiz;
+--DROP DATABASE IF EXISTS awp_quiz;
 
 -- Create database
 CREATE DATABASE awp_quiz
