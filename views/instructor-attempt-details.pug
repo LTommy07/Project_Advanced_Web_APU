@@ -1,80 +1,132 @@
 extends layout
 
 block content
-  h1 Attempt Details
-  
-  .attempt-info
-    h2 Student: #{attempt.student_name} (#{attempt.student_email})
-    p Quiz: #{attempt.quiz_title}
-    p Score: #{attempt.score}% (#{attempt.total_points}/#{attempt.max_points} points)
-    if attempt.time_taken
-      p Time Taken: #{Math.floor(attempt.time_taken / 60)} min #{attempt.time_taken % 60} sec
-    p Date: #{new Date(attempt.created_at).toLocaleString()}
-
-  h2 Responses
-  
-  if details && details.length > 0
-    each detail, index in details
-      .question-detail(class=detail.is_correct ? 'correct' : 'incorrect')
-        h3 Question #{index + 1} (#{detail.points} pts)
-        p.question-text= detail.question_text
-        
-        .options
-          p(class=detail.correct_option === 'A' ? 'correct-answer' : '') A: #{detail.option_a}
-          p(class=detail.correct_option === 'B' ? 'correct-answer' : '') B: #{detail.option_b}
-          p(class=detail.correct_option === 'C' ? 'correct-answer' : '') C: #{detail.option_c}
-          p(class=detail.correct_option === 'D' ? 'correct-answer' : '') D: #{detail.option_d}
-        
-        .student-response
-          p Student answered: 
-            strong(class=detail.is_correct ? 'text-success' : 'text-danger')= detail.student_answer || 'No answer'
-          p Points earned: #{detail.points_earned}/#{detail.points}
-          if detail.is_correct
-            p.badge.success ✓ Correct
-          else
-            p.badge.error ✗ Incorrect
-  else
-    p No details available
-
-  a(href=`/instructor/quizzes/${attempt.quiz_id}/results`) Back to Results
-
-  style.
-    .question-detail {
-      border: 2px solid #ddd;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 8px;
-    }
-    .question-detail.correct {
-      border-color: #28a745;
-      background-color: #f0fff4;
-    }
-    .question-detail.incorrect {
-      border-color: #dc3545;
-      background-color: #fff5f5;
-    }
-    .correct-answer {
-      background-color: #d4edda;
-      padding: 5px;
-      border-radius: 4px;
-    }
-    .text-success {
-      color: #28a745;
-    }
-    .text-danger {
-      color: #dc3545;
-    }
-    .badge {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-    .badge.success {
-      background-color: #28a745;
-      color: white;
-    }
-    .badge.error {
-      background-color: #dc3545;
-      color: white;
-    }
+  .page-container
+    //- Header with gradient (like quiz-header)
+    .quiz-header
+      .quiz-title-section
+        h1 📊 Attempt Details
+        p.quiz-description Student's quiz attempt review
+        .quiz-meta-info
+          span.meta-label Student: 
+          span.meta-value #{attempt.student_name}
+          span.meta-separator •
+          span.meta-label Quiz: 
+          span.meta-value #{attempt.quiz_title}
+    
+    //- Stats Summary Cards
+    .stats-summary
+      .stat-card
+        .stat-icon 🎯
+        .stat-info
+          span.stat-value #{attempt.score}%
+          span.stat-label Score
+      
+      .stat-card
+        .stat-icon ⭐
+        .stat-info
+          span.stat-value #{attempt.total_points}/#{attempt.max_points}
+          span.stat-label Points
+      
+      if attempt.time_taken
+        .stat-card
+          .stat-icon ⏱️
+          .stat-info
+            span.stat-value #{Math.floor(attempt.time_taken / 60)}:#{String(attempt.time_taken % 60).padStart(2, '0')}
+            span.stat-label Time Taken
+      
+      .stat-card
+        .stat-icon 📅
+        .stat-info
+          span.stat-value= new Date(attempt.created_at).toLocaleDateString()
+          span.stat-label Date
+    
+    //- Student Info Card
+    .section-header
+      h2 👤 Student Information
+    
+    .student-info-card
+      .student-info-row
+        span.info-label Name:
+        span.info-value #{attempt.student_name}
+      .student-info-row
+        span.info-label Email:
+        span.info-value #{attempt.student_email}
+      .student-info-row
+        span.info-label Quiz:
+        span.info-value #{attempt.quiz_title}
+    
+    //- Responses Section
+    .section-header
+      h2 📝 Responses
+      if details && details.length > 0
+        span.question-count #{details.length} question(s)
+    
+    if details && details.length > 0
+      .questions-list
+        each detail, index in details
+          .question-card(class=detail.is_correct ? 'correct-answer-card' : 'incorrect-answer-card')
+            .question-header
+              .question-info
+                span.question-number ##{index + 1}
+                span.question-points #{detail.points} pt(s)
+              
+              if detail.is_correct
+                span.badge.badge-success ✓ Correct
+              else
+                span.badge.badge-error ✗ Incorrect
+            
+            .question-body
+              p.question-text= detail.question_text
+              
+              .options-grid
+                .option-item(class=detail.correct_option === 'A' ? 'correct-answer' : (detail.student_answer === 'A' ? 'student-wrong-answer' : ''))
+                  span.option-letter A
+                  span.option-text= detail.option_a
+                  if detail.correct_option === 'A'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'A' && !detail.is_correct
+                    span.wrong-icon ✗
+                
+                .option-item(class=detail.correct_option === 'B' ? 'correct-answer' : (detail.student_answer === 'B' ? 'student-wrong-answer' : ''))
+                  span.option-letter B
+                  span.option-text= detail.option_b
+                  if detail.correct_option === 'B'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'B' && !detail.is_correct
+                    span.wrong-icon ✗
+                
+                .option-item(class=detail.correct_option === 'C' ? 'correct-answer' : (detail.student_answer === 'C' ? 'student-wrong-answer' : ''))
+                  span.option-letter C
+                  span.option-text= detail.option_c
+                  if detail.correct_option === 'C'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'C' && !detail.is_correct
+                    span.wrong-icon ✗
+                
+                .option-item(class=detail.correct_option === 'D' ? 'correct-answer' : (detail.student_answer === 'D' ? 'student-wrong-answer' : ''))
+                  span.option-letter D
+                  span.option-text= detail.option_d
+                  if detail.correct_option === 'D'
+                    span.correct-icon ✓
+                  if detail.student_answer === 'D' && !detail.is_correct
+                    span.wrong-icon ✗
+              
+              .answer-summary
+                .answer-row
+                  span.answer-label Student answered:
+                  span.answer-value(class=detail.is_correct ? 'text-success' : 'text-danger')= detail.student_answer || 'No answer'
+                .answer-row
+                  span.answer-label Points earned:
+                  span.answer-value.points-earned #{detail.points_earned}/#{detail.points}
+    else
+      .empty-state-questions
+        .empty-icon 📭
+        h3 No Response Details
+        p No detailed responses available for this attempt
+    
+    //- Back Button
+    .form-actions
+      a.btn.btn-secondary(href=`/instructor/quizzes/${attempt.quiz_id}/results`) 
+        span ← 
+        | Back to Results

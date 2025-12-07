@@ -1,0 +1,94 @@
+extends layout
+
+block content
+  .page-container
+    //- Header
+    .quiz-header
+      .quiz-title-section
+        h1 ✏️ Edit Question
+        p.quiz-description Modify question for quiz: #{quiz.title}
+    
+    //- Error message if validation fails
+    if error
+      .error-message
+        span ⚠️ 
+        = error
+    
+    //- Edit form
+    .edit-question-section
+      form.question-form(method='POST', action=`/instructor/quizzes/${quiz.id}/questions/${question.id}/edit`)
+        .form-row
+          .form-group.full-width
+            label(for='question_text') 
+              span.label-icon 📝
+              | Question Text
+            textarea(name='question_text', id='question_text', required, rows='4', placeholder='Enter your question here...')= question.question_text
+        
+        .form-row.options-row
+          .form-group
+            label(for='option_a') 
+              span.option-badge A
+              | Option A
+            input(type='text', name='option_a', id='option_a', required, placeholder='First option', value=question.option_a)
+          
+          .form-group
+            label(for='option_b') 
+              span.option-badge B
+              | Option B
+            input(type='text', name='option_b', id='option_b', required, placeholder='Second option', value=question.option_b)
+        
+        .form-row.options-row
+          .form-group
+            label(for='option_c') 
+              span.option-badge C
+              | Option C
+            input(type='text', name='option_c', id='option_c', required, placeholder='Third option', value=question.option_c)
+          
+          .form-group
+            label(for='option_d') 
+              span.option-badge D
+              | Option D
+            input(type='text', name='option_d', id='option_d', required, placeholder='Fourth option', value=question.option_d)
+        
+        .form-row
+          .form-group
+            label(for='correct_option') 
+              span.label-icon ✓
+              | Correct Answer
+            select(name='correct_option', id='correct_option', required)
+              option(value='A', selected=question.correct_option === 'A') A - Option A
+              option(value='B', selected=question.correct_option === 'B') B - Option B
+              option(value='C', selected=question.correct_option === 'C') C - Option C
+              option(value='D', selected=question.correct_option === 'D') D - Option D
+          
+          .form-group
+            label(for='points') 
+              span.label-icon ⭐
+              | Points
+            input(type='number', name='points', id='points', min='1', value=question.points || 1, required)
+        
+        .form-actions
+          button.btn.btn-primary(type='submit') 
+            span ✓ 
+            | Save Changes
+          a.btn.btn-secondary(href=`/instructor/quizzes/${quiz.id}/questions`) 
+            span ✕ 
+            | Cancel
+
+  style.
+    .error-message {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+    }
+    
+    .edit-question-section {
+      margin-top: 2rem;
+    }

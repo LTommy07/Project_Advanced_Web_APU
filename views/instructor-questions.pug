@@ -27,9 +27,24 @@ block content
           each q, index in questions
             .question-card
               .question-header
-                span.question-number ##{index + 1}
-                span.question-points #{q.points || 1} pt(s)
-              
+                .question-info
+                  span.question-number ##{index + 1}
+                  span.question-points #{q.points || 1} pt(s)
+                
+                .question-actions
+                  a.btn.btn-success.btn-sm(href=`/instructor/quizzes/${quiz.id}/questions/${q.id}/edit`) 
+                    span ✏️ 
+                    | Edit
+                  
+                  form(method='POST', action=`/instructor/quizzes/${quiz.id}/questions/${q.id}/delete`, style='display:inline; margin-left: 0.5rem;')
+                    button.btn.btn-danger.btn-sm(
+                      type='submit', 
+                      onclick="return confirm('⚠️ Delete this question?\\n\\nThis action cannot be undone.')"
+                    ) 
+                      span 🗑️ 
+                      | Delete
+
+
               .question-body
                 p.question-text= q.question_text
                 

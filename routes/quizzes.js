@@ -649,4 +649,198 @@ router.get('/instructor/attempts/:attemptId/details', requireAuth, ensureInstruc
   );
 });
 
+// ========================================
+// DELETE A QUESTION
+// ========================================
+router.post('/instructor/quizzes/:quizId/questions/:questionId/delete', 
+  requireAuth, 
+  ensureInstructor, 
+  function(req, res, next) {
+    const { quizId, questionId } = req.params;
+    
+    // Step 1: Check if quiz has any attempts
+    db.query(
+      'SELECT COUNT(*) as count FROM attempts WHERE quiz_id = ?',
+      [quizId],
+      function(err, countResults) {
+        if (err) return next(err);
+        
+        const attemptCount = countResults[0].count;
+        
+        if (attemptCount > 0) {
+          // Block deletion if students have already taken the quiz
+          return res.status(400).send(
+            `Cannot delete question: This quiz has already been attempted by ${attemptCount} student(s). ` +
+            'Deleting questions would invalidate existing results.'
+          );
+        }
+        
+        // Step 2: Verify quiz belongs to this instructor
+        db.query(
+          'SELECT * FROM quizzes WHERE id = ? AND instructor_id = ?',
+          [quizId, req.user.id],
+          function(err2, quizResults) {
+            if (err2) return next(err2);
+            
+            if (quizResults.length === 0) {
+              return res.status(403).send('Access denied: Quiz not found or not yours.');
+            }
+            
+            // Step 3: Verify question exists for this quiz
+            db.query(
+              'SELECT * FROM questions WHERE id = ? AND quiz_id = ?',
+              [questionId, quizId],
+              function(err3, questionResults) {
+                if (err3) return next(err3);
+                
+                if (questionResults.length === 0) {
+                  return res.status(404).send('Question not found.');
+                }
+                
+                // Step 4: All checks passed, delete the question
+                db.query(
+                  'DELETE FROM questions WHERE id = ?',
+                  [questionId],
+                  function(err4) {
+                    if (err4) return next(err4);
+                    
+                    // Redirect back to the questions list
+                    res.redirect(`/instructor/quizzes/${quizId}/questions`);
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
+  }
+);
+
+// ========================================
+// EDIT QUESTION - GET FORM
+// ========================================
+router.get('/instructor/quizzes/:quizId/questions/:questionId/edit', 
+  requireAuth, 
+  ensureInstructor, 
+  function(req, res, next) {
+    const { quizId, questionId } = req.params;
+    
+    // Step 1: Verify quiz belongs to this instructor
+    db.query(
+      'SELECT * FROM quizzes WHERE id = ? AND instructor_id = ?',
+      [quizId, req.user.id],
+      function(err, quizResults) {
+        if (err) return next(err);
+        
+        if (quizResults.length === 0) {
+          return res.status(403).send('Access denied: Quiz not found or not yours.');
+        }
+        
+        const quiz = quizResults[0];
+        
+        // Step 2: Get the question to edit
+        db.query(
+          'SELECT * FROM questions WHERE id = ? AND quiz_id = ?',
+          [questionId, quizId],
+          function(err2, questionResults) {
+            if (err2) return next(err2);
+            
+            if (questionResults.length === 0) {
+              return res.status(404).send('Question not found.');
+            }
+            
+            const question = questionResults[0];
+            
+            // Render edit form
+            res.render('instructor-edit-question', {
+              user: req.user,
+              quiz: quiz,
+              question: question,
+              error: null
+            });
+          }
+        );
+      }
+    );
+  }
+);
+
+// ========================================
+// EDIT QUESTION - POST UPDATE
+// ========================================
+router.post('/instructor/quizzes/:quizId/questions/:questionId/edit', 
+  requireAuth, 
+  ensureInstructor, 
+  function(req, res, next) {
+    const { quizId, questionId } = req.params;
+    const { question_text, option_a, option_b, option_c, option_d, correct_option, points } = req.body;
+    
+    // Step 1: Validation
+    if (!question_text || !option_a || !option_b || !option_c || !option_d || !correct_option) {
+      // Get quiz and question data to re-render form with error
+      db.query(
+        'SELECT * FROM quizzes WHERE id = ? AND instructor_id = ?',
+        [quizId, req.user.id],
+        function(err, quizResults) {
+          if (err) return next(err);
+          
+          db.query(
+            'SELECT * FROM questions WHERE id = ?',
+            [questionId],
+            function(err2, questionResults) {
+              if (err2) return next(err2);
+              
+              return res.render('instructor-edit-question', {
+                user: req.user,
+                quiz: quizResults[0],
+                question: questionResults[0],
+                error: 'All fields are required.'
+              });
+            }
+          );
+        }
+      );
+      return;
+    }
+    
+    const pointsValue = points && !isNaN(points) ? parseInt(points) : 1;
+    
+    // Step 2: Verify quiz belongs to this instructor
+    db.query(
+      'SELECT * FROM quizzes WHERE id = ? AND instructor_id = ?',
+      [quizId, req.user.id],
+      function(err, quizResults) {
+        if (err) return next(err);
+        
+        if (quizResults.length === 0) {
+          return res.status(403).send('Access denied: Quiz not found or not yours.');
+        }
+        
+        // Step 3: Update the question
+        db.query(
+          `UPDATE questions 
+           SET question_text = ?, 
+               option_a = ?, 
+               option_b = ?, 
+               option_c = ?, 
+               option_d = ?, 
+               correct_option = ?, 
+               points = ?
+           WHERE id = ? AND quiz_id = ?`,
+          [question_text, option_a, option_b, option_c, option_d, correct_option, pointsValue, questionId, quizId],
+          function(err2) {
+            if (err2) return next(err2);
+            
+            // Success! Redirect to questions page
+            res.redirect(`/instructor/quizzes/${quizId}/questions`);
+          }
+        );
+      }
+    );
+  }
+);
+
+
+
 module.exports = router;

@@ -1,6 +1,6 @@
 -- ============================================================
 -- AWP Quiz Platform - Complete Database Schema
--- Author: LTommy07
+
 -- Course: Advanced Web Programming - APU 2025
 -- Description: Full database setup with all tables and indexes
 -- ============================================================

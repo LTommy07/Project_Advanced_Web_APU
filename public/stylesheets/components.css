@@ -193,11 +193,11 @@
 /* ===== BADGES ===== */
 /* Modifier les badges existants (ligne ~180) */
 .badge {
-  padding: 0.4rem 0.8rem;  /* ← Changer de 0.5rem 1rem à 0.4rem 0.8rem */
-  border-radius: 4px;       /* ← Changer de 20px à 4px */
-  font-weight: 600;         /* ← OK déjà là */
-  font-size: 0.90em;        /* ← Changer de 0.85rem à 0.90em */
-  letter-spacing: 0.02em;   /* ← AJOUTER */
+  padding: 0.4rem 0.8rem;  
+  border-radius: 4px;       
+  font-weight: 600;         
+  font-size: 0.90em;        
+  letter-spacing: 0.02em;   
   display: inline-block;
 }
 
@@ -1314,6 +1314,75 @@
 }
 
 /* ========================================
+   EDIT & DELETE QUESTION FEATURES
+======================================== */
+
+/* Adjust question header layout */
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.question-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Small button variant */
+.btn-sm {
+  padding: 0.5rem 1rem !important;
+  font-size: 0.85rem !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Edit button specific styling */
+.btn-success.btn-sm {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  box-shadow: 0 2px 6px rgba(56, 239, 125, 0.3);
+}
+
+.btn-success.btn-sm:hover {
+  background: linear-gradient(135deg, #0f8c7f 0%, #2dd36f 100%);
+  box-shadow: 0 4px 12px rgba(56, 239, 125, 0.5);
+}
+
+/* Responsive for action buttons */
+@media (max-width: 768px) {
+  .question-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .question-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .question-actions form {
+    width: 100%;
+  }
+  
+  .btn-sm {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0 !important;
+  }
+}
+
+
+
+/* ========================================
    INSTRUCTOR QUIZ RESULTS - FIX BOUTON
 ======================================== */
 
@@ -1338,6 +1407,146 @@
 
 .table-modern tbody tr.fail {
   border-left: 4px solid #f5576c;
+}
+
+
+/* ========================================
+   INSTRUCTOR ATTEMPT DETAILS PAGE
+======================================== */
+
+/* Student Info Card */
+.student-info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.student-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.student-info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #718096;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.info-value {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+/* Answer Cards - Correct/Incorrect */
+.correct-answer-card {
+  border-left: 4px solid #28a745 !important;
+  background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%) !important;
+}
+
+.incorrect-answer-card {
+  border-left: 4px solid #e53e3e !important;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%) !important;
+}
+
+/* Badges for Correct/Incorrect */
+.badge-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge-error {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Student Wrong Answer Highlight */
+.student-wrong-answer {
+  background: linear-gradient(135deg, #fff5f5 0%, #fee 100%) !important;
+  border-color: #f5576c !important;
+  border-left-width: 4px !important;
+}
+
+.wrong-icon {
+  color: #e53e3e;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Answer Summary Section */
+.answer-summary {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.answer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.answer-label {
+  color: #718096;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.answer-value {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-danger {
+  color: #e53e3e !important;
+}
+
+.points-earned {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .student-info-row,
+  .answer-row {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .stats-summary {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 
