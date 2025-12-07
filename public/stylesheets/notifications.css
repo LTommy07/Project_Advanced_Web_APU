@@ -1,0 +1,262 @@
+/* ========================================
+   LOADING SPINNER
+======================================== */
+
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.spinner-overlay.active {
+  display: flex;
+}
+
+.spinner-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  min-width: 200px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #4F46E5;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-text {
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ========================================
+   TOAST NOTIFICATIONS
+======================================== */
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.toast {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 300px;
+  animation: slideIn 0.3s ease-out;
+  border-left: 4px solid #4F46E5;
+  position: relative;
+  overflow: hidden;
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: currentColor;
+  animation: progress 3s linear;
+}
+
+.toast.success {
+  border-left-color: #10B981;
+}
+
+.toast.success::before {
+  background: #10B981;
+}
+
+.toast.error {
+  border-left-color: #EF4444;
+}
+
+.toast.error::before {
+  background: #EF4444;
+}
+
+.toast.warning {
+  border-left-color: #F59E0B;
+}
+
+.toast.warning::before {
+  background: #F59E0B;
+}
+
+.toast.info {
+  border-left-color: #3B82F6;
+}
+
+.toast.info::before {
+  background: #3B82F6;
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.toast.success .toast-icon::before {
+  content: '✓';
+  color: #10B981;
+}
+
+.toast.error .toast-icon::before {
+  content: '✕';
+  color: #EF4444;
+}
+
+.toast.warning .toast-icon::before {
+  content: '⚠';
+  color: #F59E0B;
+}
+
+.toast.info .toast-icon::before {
+  content: 'ℹ';
+  color: #3B82F6;
+}
+
+.toast-content {
+  flex: 1;
+}
+
+.toast-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 0.25rem 0;
+  color: #1F2937;
+}
+
+.toast-message {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #9CA3AF;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.toast-close:hover {
+  background: #F3F4F6;
+  color: #374151;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+@keyframes progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.toast.removing {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .toast-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .toast {
+    min-width: auto;
+  }
+}
+
+/* ========================================
+   BUTTON LOADING STATE
+======================================== */
+
+.btn.loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.btn-secondary.loading::after {
+  border-color: #4F46E5;
+  border-top-color: transparent;
+}
